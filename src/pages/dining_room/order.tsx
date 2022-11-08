@@ -4,22 +4,16 @@ import { AtTabs, AtTabsPane, AtTabBar } from 'taro-ui'
 
 const getSideBarList = () => {
   return [
-    { title: '小炒' },
-    { title: '炖菜' },
-    { title: '烧菜' },
-    { title: '煎炸' },
-    { title: '蘸料' },
-    { title: '饮品' },
-    { title: '甜点' }
+    { title: '小炒', id: 'xc' },
+    { title: '炖菜', id: 'dc' },
+    { title: '烧菜', id: 'sc' },
+    { title: '煎炸', id: 'jz' },
+    { title: '蘸料', id: 'zl' },
+    { title: '饮品', id: 'yp' },
+    { title: '甜点', id: 'td' }
   ]
 }
 
-
-export const ItemList: React.FC = () => {
-  return (
-    <View style='padding: 100px 50px;background-color: #FAFBFC;text-align: center;' >thist</View>
-  )
-}
 
 export const TabBar: React.FC = () => {
 
@@ -36,8 +30,10 @@ export const TabBar: React.FC = () => {
       tabList={tabs}
       onClick={(value) => { setCurrent(value) }}>
 
-      {tabs.map((_, idx) => (
-        <AtTabsPane current={current} index={idx}>
+      {tabs.map((item, idx) => (
+        
+        <AtTabsPane current={idx} index={idx} key={idx}>
+          <View>{item.title}</View>
         </AtTabsPane>
       ))}
 
