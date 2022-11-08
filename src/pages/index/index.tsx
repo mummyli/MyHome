@@ -6,23 +6,12 @@ import { AtGrid } from "taro-ui"
 
 export default class Index extends Component<PropsWithChildren> {
 
-  componentWillMount() { }
-
-  componentDidMount() { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
+  handleNaviagate = (item) => { Taro.navigateTo({ url: item.url }) };
 
   render() {
     return (
       <View className='index'>
-        <AtGrid columnNum={2} onClick={(item) => {console.log(item) 
-         Taro.navigateTo({url: item.url})
-      }
-      } data={
+        <AtGrid columnNum={2} onClick={this.handleNaviagate} data={
           [
             {
               image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png',
