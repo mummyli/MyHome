@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { View } from '@tarojs/components'
-import { AtTabs, AtTabsPane, AtTabBar } from 'taro-ui'
+import { View, Image } from '@tarojs/components'
+import { AtTabs, AtTabsPane, AtTabBar, AtIcon, AtButton } from 'taro-ui'
+import './order.less'
 
 const getSideBarList = () => {
   return [
@@ -10,10 +11,42 @@ const getSideBarList = () => {
     { title: '煎炸', id: 'jz' },
     { title: '蘸料', id: 'zl' },
     { title: '饮品', id: 'yp' },
-    { title: '甜点', id: 'td' }
+    { title: '甜点', id: 'td' },
+    { title: '加菜', id: 'jc' }
   ]
 }
 
+
+const getFoodMenu = () => {
+  return [
+    { 'title': '青椒肉丝', 'id': 'qjrs', 'desc': 'desc desc', 'order_nums': '9', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '芹菜肉末', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '20', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '小炒肉', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' }
+  ]
+}
+
+
+export const FoodMenu: React.FC = () => {
+
+  const foods = getFoodMenu()
+
+  return (
+    <View className='content-box'>
+      {foods.map((item, idx) => (
+        <View className='at-row item-detail' key={idx}>
+          <Image mode='scaleToFill' className='at-col at-col-4 at-col--auto item-img' src={item.pic_url} />
+          <View className='at-col out-box'>
+            <View className='item-title'>{item.title}</View>
+            <View className='item-desc'>{item.desc}</View>
+            <View className='at-row at-row__justify--between item-sales'>
+              <View>已点{item.order_nums}次</View>
+              <AtIcon value='add-circle' size='20' color='#F00'></AtIcon>
+            </View>
+          </View>
+        </View>))}
+    </View >
+  )
+}
 
 export const TabBar: React.FC = () => {
 
@@ -25,15 +58,14 @@ export const TabBar: React.FC = () => {
     <AtTabs
       current={current}
       scroll
-      height='300px'
+      height='400px'
       tabDirection='vertical'
       tabList={tabs}
       onClick={(value) => { setCurrent(value) }}>
 
       {tabs.map((item, idx) => (
-        
-        <AtTabsPane current={idx} index={idx} key={idx}>
-          <View>{item.title}</View>
+        <AtTabsPane tabDirection='vertical' current={current} index={idx} key={item.id}>
+          <FoodMenu />
         </AtTabsPane>
       ))}
 
@@ -51,6 +83,9 @@ export default () => {
         <View className='side-bar'>
           <TabBar />
         </View>
+      </View>
+      <View className="cart-bar">
+        <AtButton loading type='primary'>购物车</AtButton>
       </View>
       <AtTabBar
         tabList={[
