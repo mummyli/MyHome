@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Image } from '@tarojs/components'
-import { AtTabs, AtTabsPane, AtTabBar, AtIcon, AtButton, AtActionSheet, AtActionSheetItem } from 'taro-ui'
+import { AtTabs, AtTabsPane, AtTabBar, AtIcon, AtButton, AtActionSheet, AtDivider } from 'taro-ui'
 import './order.less'
 
 const getSideBarList = () => {
@@ -26,7 +26,26 @@ const getFoodMenu = () => {
 }
 
 
-export const FoodMenu: React.FC = () => {
+const shopCartList = () => {
+  return [
+    { 'title': '青椒肉丝', 'id': 'qjrs', 'desc': 'desc desc', 'order_nums': '9', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '芹菜肉末', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '20', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '小炒肉', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '糖醋排骨', 'id': 'qjrs', 'desc': 'desc desc', 'order_nums': '9', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '土豆饼', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '20', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '大葱烧豆腐', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '椒盐杏鲍菇', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '青椒肉丝', 'id': 'qjrs', 'desc': 'desc desc', 'order_nums': '9', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '芹菜肉末', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '20', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '小炒肉', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '糖醋排骨', 'id': 'qjrs', 'desc': 'desc desc', 'order_nums': '9', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '土豆饼', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '20', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '大葱烧豆腐', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
+    { 'title': '椒盐杏鲍菇', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' }
+  ]
+}
+
+const FoodMenu: React.FC = () => {
 
   const foods = getFoodMenu()
 
@@ -48,7 +67,30 @@ export const FoodMenu: React.FC = () => {
   )
 }
 
-export const TabBar: React.FC = () => {
+const ShoppingCart: React.FC = () => {
+
+  const cartList = shopCartList()
+
+  return (
+    <View className='box-1'>
+      <View className='shopping-cart-title'><AtIcon value='trash' size='16' /><View>清空</View></View>
+      <View className='shopping-cart-list'>
+        {cartList.map((item, idx) => (
+          <View key={idx} className='cart-box-content'>
+            <View className='item-box'>
+              <View className='item-box-info'>
+                <Image mode='scaleToFill' className='cart-img' src={item.pic_url} />
+                <View className='item-title'>{item.title}</View>
+              </View>
+              <AtIcon value='close' size='18'></AtIcon>
+            </View>
+          </View>
+        ))}
+      </View>
+    </View>)
+}
+
+const TabBar: React.FC = () => {
 
   const tabs = getSideBarList()
 
@@ -82,11 +124,7 @@ export default () => {
 
   return (
     <View className='main-box'>
-      <View className='box'>
-        <View className='side-bar'>
-          <TabBar />
-        </View>
-      </View>
+      <TabBar />
       <View className='box-bottom'>
         <View className="cart-bar">
           <View className='l' onClick={() => { setcartOpen(cartOpen ? false : true) }}>
@@ -95,7 +133,6 @@ export default () => {
           </View>
           <AtButton className='cart-botton' type='primary'>选好了</AtButton>
         </View>
-
         <AtTabBar
           tabList={[
             { title: '点餐', image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png' },
@@ -106,31 +143,11 @@ export default () => {
           fixed={true}
           className='bottom-menu'
         />
-      </View>
 
-      <AtActionSheet isOpened={cartOpen} className='cart-item'>
-        <AtActionSheetItem>
-          菜品1
-        </AtActionSheetItem>
-        <AtActionSheetItem>
-          菜品2
-        </AtActionSheetItem>
-        <AtActionSheetItem>
-          菜品3
-        </AtActionSheetItem>
-        <AtActionSheetItem>
-          菜品4
-        </AtActionSheetItem>
-        <AtActionSheetItem>
-          菜品5
-        </AtActionSheetItem>
-        <AtActionSheetItem>
-          菜品6
-        </AtActionSheetItem>
-        <AtActionSheetItem>
-          菜品7
-        </AtActionSheetItem>
-      </AtActionSheet>
+        <AtActionSheet isOpened={cartOpen} className='cart-items'>
+          <ShoppingCart />
+        </AtActionSheet>
+      </View>
     </View>
   )
 }
