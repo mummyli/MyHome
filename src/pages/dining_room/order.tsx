@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Image } from '@tarojs/components'
-import { AtTabs, AtTabsPane, AtTabBar, AtIcon, AtButton, AtActionSheet, AtDivider } from 'taro-ui'
+import { AtTabs, AtTabsPane, AtTabBar, AtIcon, AtButton, AtFloatLayout } from 'taro-ui'
 import './order.less'
 
 const getSideBarList = () => {
@@ -144,9 +144,9 @@ export default () => {
           className='bottom-menu'
         />
 
-        <AtActionSheet isOpened={cartOpen} className='cart-items'>
+        <AtFloatLayout isOpened={cartOpen} className='cart-items'>
           <ShoppingCart />
-        </AtActionSheet>
+        </AtFloatLayout >
       </View>
     </View>
   )
