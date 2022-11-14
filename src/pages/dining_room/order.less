@@ -71,6 +71,8 @@
 
 .box-1 {
     max-height: 100%;
+    width: 100%;
+    box-sizing: border-box;
     padding-bottom: 300px;
 }
 
@@ -135,7 +137,10 @@
 
 .shopping-cart-title{
     height: 40px;
+    width: 100%;
+    box-sizing: border-box;
     padding: 30px 50px;
+    position: fixed;
     border-bottom: 1px solid rgb(239, 239, 239);
     display: flex;
     flex-direction: row;
@@ -143,9 +148,11 @@
     justify-content:flex-end;
     font-size: 28px;
     letter-spacing: 4px;
+    background-color: #fff;
 }
 
 .shopping-cart-list{
+    padding-top: 40px;
     max-height: 70%;
     overflow: scroll;
 }

@@ -3,6 +3,32 @@ import { View, Image } from '@tarojs/components'
 import { AtTabs, AtTabsPane, AtTabBar, AtIcon, AtButton, AtFloatLayout } from 'taro-ui'
 import './order.less'
 
+export interface MenuItem {
+  id: string;
+  name: string;
+  desc: string;
+  order_nums: number;
+  pic_url: string;
+  is_ordered: boolean;
+}
+
+interface ShoppingCartProps {
+  list: MenuItem[];
+  onChange: (list: MenuItem[]) => void;
+}
+
+interface FoodMenuProps {
+  menuList: MenuItem[];
+  cartList: MenuItem[];
+  onChange: (list: MenuItem[]) => void;
+}
+
+interface TabBarProps {
+  menuList: MenuItem[];
+  cartList: MenuItem[];
+  onChange: (list: MenuItem[]) => void;
+}
+
 const getSideBarList = () => {
   return [
     { title: '小炒', id: 'xc' },
@@ -18,71 +44,92 @@ const getSideBarList = () => {
 
 
 const getFoodMenu = () => {
-  return [
-    { 'title': '青椒肉丝', 'id': 'qjrs', 'desc': 'desc desc', 'order_nums': '9', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '芹菜肉末', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '20', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '小炒肉', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' }
-  ]
-}
+  const menue_list = '['
+    + '{ "id": "qjrs", "name": "青椒肉丝", "desc": "desc desc", "order_nums": "9", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
+    + '{ "id": "qcrm", "name": "芹菜肉末", "desc": "desc desc", "order_nums": "20", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
+    + '{ "id": "xcr", "name": "小炒肉", "desc": "desc desc", "order_nums": "11", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
+    + '{ "id": "tcpg", "name": "糖醋排骨", "desc": "desc desc", "order_nums": "9", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
+    + '{ "id": "tdb", "name": "土豆饼", "desc": "desc desc", "order_nums": "20", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
+    + '{ "id": "dcsdf", "name": "大葱烧豆腐", "desc": "desc desc", "order_nums": "11", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
+    + '{ "id": "jyxbg", "name": "椒盐杏鲍菇", "desc": "desc desc", "order_nums": "11", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" }'
+    + ' ]'
 
+  const result: MenuItem[] = JSON.parse(menue_list)
+
+  return result
+}
 
 const shopCartList = () => {
-  return [
-    { 'title': '青椒肉丝', 'id': 'qjrs', 'desc': 'desc desc', 'order_nums': '9', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '芹菜肉末', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '20', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '小炒肉', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '糖醋排骨', 'id': 'qjrs', 'desc': 'desc desc', 'order_nums': '9', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '土豆饼', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '20', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '大葱烧豆腐', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '椒盐杏鲍菇', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '青椒肉丝', 'id': 'qjrs', 'desc': 'desc desc', 'order_nums': '9', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '芹菜肉末', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '20', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '小炒肉', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '糖醋排骨', 'id': 'qjrs', 'desc': 'desc desc', 'order_nums': '9', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '土豆饼', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '20', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '大葱烧豆腐', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' },
-    { 'title': '椒盐杏鲍菇', 'id': 'xcr', 'desc': 'desc desc', 'order_nums': '11', 'pic_url': 'https://s1.ax1x.com/2022/11/09/zSemy4.png' }
-  ]
+
+  const cart_list = '['
+    + '{ "id": "qjrs", "name": "青椒肉丝", "desc": "desc desc", "order_nums": "9", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png" },'
+    + '{ "id": "qcrm", "name": "芹菜肉末", "desc": "desc desc", "order_nums": "20", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png" },'
+    + '{ "id": "xcr", "name": "小炒肉", "desc": "desc desc", "order_nums": "11", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png" },'
+    + '{ "id": "tcpg", "name": "糖醋排骨", "desc": "desc desc", "order_nums": "9", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png" },'
+    + '{ "id": "tdb", "name": "土豆饼", "desc": "desc desc", "order_nums": "20", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png" },'
+    + '{ "id": "dcsdf", "name": "大葱烧豆腐", "desc": "desc desc", "order_nums": "11", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png" },'
+    + '{ "id": "jyxbg", "name": "椒盐杏鲍菇", "desc": "desc desc", "order_nums": "11", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png" }'
+    + ' ]'
+
+  const result: MenuItem[] = JSON.parse(cart_list)
+
+  return result
 }
 
-const FoodMenu: React.FC = () => {
 
-  const foods = getFoodMenu()
+const FoodMenu: React.FC<FoodMenuProps> = ({ menuList, cartList, onChange }) => {
+
+  const handleClick = (item: MenuItem) => {
+    const temp = [...cartList];
+    temp.push(item);
+    onChange(temp);
+  }
 
   return (
     <View className='content-box'>
-      {foods.map((item, idx) => (
+      {menuList.map((item, idx) => {
+
+        let icon = 'add-circle'
+        if(cartList.includes(item)){
+          icon = 'check'
+        }
+
+        return (
         <View className='at-row item-detail' key={idx}>
           <Image mode='scaleToFill' className='at-col at-col-4 at-col--auto item-img' src={item.pic_url} />
           <View className='at-col out-box'>
-            <View className='item-title'>{item.title}</View>
+            <View className='item-title'>{item.name}</View>
             <View className='item-desc'>{item.desc}</View>
             <View className='at-row at-row__justify--between item-sales'>
               <View>已点{item.order_nums}次</View>
-              <AtIcon value='add-circle' size='20' color='#F00'></AtIcon>
+              <AtIcon value={icon} size='20' color='#F00' onClick={() => { handleClick(item); }}></AtIcon>
             </View>
           </View>
-        </View>))}
+        </View>)})}
     </View >
   )
 }
 
-const ShoppingCart: React.FC = () => {
+const ShoppingCart: React.FC<ShoppingCartProps> = ({ list, onChange }) => {
 
-  const cartList = shopCartList()
+  const handleRemove = (idx: number) => {
+    const temp = [...list];
+    temp.splice(idx, 1);
+    onChange(temp);
+  }
 
   return (
     <View className='box-1'>
       <View className='shopping-cart-title'><AtIcon value='trash' size='16' /><View>清空</View></View>
       <View className='shopping-cart-list'>
-        {cartList.map((item, idx) => (
+        {list.map((item, idx) => (
           <View key={idx} className='cart-box-content'>
             <View className='item-box'>
               <View className='item-box-info'>
                 <Image mode='scaleToFill' className='cart-img' src={item.pic_url} />
-                <View className='item-title'>{item.title}</View>
+                <View className='item-title'>{item.name}</View>
               </View>
-              <AtIcon value='close' size='18'></AtIcon>
+              <AtIcon value='close' size='18' onClick={() => { handleRemove(idx); }}></AtIcon>
             </View>
           </View>
         ))}
@@ -90,7 +137,7 @@ const ShoppingCart: React.FC = () => {
     </View>)
 }
 
-const TabBar: React.FC = () => {
+const TabBar: React.FC<TabBarProps> = ({ menuList, cartList, onChange }) => {
 
   const tabs = getSideBarList()
 
@@ -108,7 +155,7 @@ const TabBar: React.FC = () => {
 
       {tabs.map((item, idx) => (
         <AtTabsPane tabDirection='vertical' current={current} index={idx} key={item.id}>
-          <FoodMenu />
+          <FoodMenu menuList={menuList} cartList={cartList} onChange={onChange} />
         </AtTabsPane>
       ))}
 
@@ -121,10 +168,12 @@ const TabBar: React.FC = () => {
 export default () => {
 
   const [cartOpen, setcartOpen] = useState<boolean>(false)
+  const [cartList, setCartList] = useState<MenuItem[]>(shopCartList())
+  const [menuList, setMenuList] = useState<MenuItem[]>(getFoodMenu())
 
   return (
     <View className='main-box'>
-      <TabBar />
+      <TabBar menuList={menuList} cartList={cartList} onChange={(value) => { setCartList(value) }} />
       <View className='box-bottom'>
         <View className="cart-bar">
           <View className='l' onClick={() => { setcartOpen(cartOpen ? false : true) }}>
@@ -145,7 +194,7 @@ export default () => {
         />
 
         <AtFloatLayout isOpened={cartOpen} className='cart-items'>
-          <ShoppingCart />
+          <ShoppingCart list={cartList} onChange={(value) => { setCartList(value) }} />
         </AtFloatLayout >
       </View>
     </View>
