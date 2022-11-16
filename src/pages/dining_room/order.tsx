@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { View, Image } from '@tarojs/components'
-import { AtTabs, AtTabsPane, AtTabBar, AtIcon, AtButton, AtFloatLayout } from 'taro-ui'
+import { View, Image, Button } from '@tarojs/components'
+import { AtTabs, AtTabsPane, AtTabBar, AtIcon, AtButton, AtFloatLayout, AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
 import './order.less'
 
 export interface MenuItem {
@@ -83,13 +83,12 @@ const FoodMenu: React.FC<FoodMenuProps> = ({ menuList, cartList, onChange }) => 
     const temp = [...cartList];
 
     const itemIdx = cartList.findIndex((cart) => cart.id === item.id)
-    if( itemIdx >= 0){
+    if (itemIdx >= 0) {
       temp.splice(itemIdx, 1);
-    }else{
+    } else {
       temp.push(item);
     }
 
-    
     onChange(temp);
   }
 
@@ -98,22 +97,23 @@ const FoodMenu: React.FC<FoodMenuProps> = ({ menuList, cartList, onChange }) => 
       {menuList.map((item, idx) => {
 
         let icon = 'add-circle'
-        if(cartList.findIndex((cart) => cart.id === item.id) >= 0){
+        if (cartList.findIndex((cart) => cart.id === item.id) >= 0) {
           icon = 'check';
         }
 
         return (
-        <View className='at-row item-detail' key={idx}>
-          <Image mode='scaleToFill' className='at-col at-col-4 at-col--auto item-img' src={item.pic_url} />
-          <View className='at-col out-box'>
-            <View className='item-title'>{item.name}</View>
-            <View className='item-desc'>{item.desc}</View>
-            <View className='at-row at-row__justify--between item-sales'>
-              <View>已点{item.order_nums}次</View>
-              <AtIcon value={icon} size='20' color='#F00' onClick={() => { handleClick(item); }}></AtIcon>
+          <View className='at-row item-detail' key={idx}>
+            <Image mode='scaleToFill' className='at-col at-col-4 at-col--auto item-img' src={item.pic_url} />
+            <View className='at-col out-box'>
+              <View className='item-title'>{item.name}</View>
+              <View className='item-desc'>{item.desc}</View>
+              <View className='at-row at-row__justify--between item-sales'>
+                <View>已点{item.order_nums}次</View>
+                <AtIcon value={icon} size='20' color='#F00' onClick={() => { handleClick(item); }}></AtIcon>
+              </View>
             </View>
-          </View>
-        </View>)})}
+          </View>)
+      })}
     </View >
   )
 }
@@ -178,7 +178,6 @@ const TabBar: React.FC<TabBarProps> = ({ menuList, cartList, onChange }) => {
 }
 
 
-
 export default () => {
 
   const [cartOpen, setcartOpen] = useState<boolean>(false)
@@ -187,25 +186,38 @@ export default () => {
 
   return (
     <View className='main-box'>
-      <TabBar menuList={menuList} cartList={cartList} onChange={(value) => { setCartList(value) }} />
+      <TabBar menuList={menuList} cartList={cartList} onChange={(value) => { setCartList(value); setcartOpen(false); }} />
       <View className='box-bottom'>
         <View className="cart-bar">
           <View className='l' onClick={() => { setcartOpen(cartOpen ? false : true) }}>
             <Image className='img-cart' src='https://s1.ax1x.com/2022/11/10/zpq07d.png' />
             <View className="badge">{cartList.length}</View>
           </View>
-          <AtButton className='cart-botton' type='primary'>选好了</AtButton>
+          <AtButton className='cart-botton' type='primary' >选好了</AtButton>
         </View>
         <AtTabBar
           tabList={[
             { title: '点餐', image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png' },
             { title: '已点', image: 'https://img20.360buyimg.com/jdphoto/s72x72_jfs/t15151/308/1012305375/2300/536ee6ef/5a411466N040a074b.png' }
           ]}
-          onClick={(idx) => idx }
+          onClick={(idx) => idx}
           current={0}
           fixed={true}
           className='bottom-menu'
         />
+
+        <View className='modal modal--active'>
+          <View className=' modal__overlay'> </View>
+          <View className='modal__container'>
+            <View className='modal__content'>
+              自定义模态框
+            </View>
+            <View className='modal__footer'>
+              <Button>取消</Button>
+              <Button>确认</Button>
+            </View>
+          </View>
+        </View>
 
         <AtFloatLayout isOpened={cartOpen} className='cart-items'>
           <ShoppingCart list={cartList} onChange={(value) => { setCartList(value) }} />

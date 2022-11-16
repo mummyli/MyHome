@@ -171,3 +171,107 @@
     width: 120px;
     padding-right: 30px;
 }
+
+.text-center{
+    text-align: center;
+}
+
+.at-modal__content{
+    display: flex;
+    flex-direction: row;
+    align-items: center !important;
+    font-size: medium;
+    letter-spacing: 5px;
+}
+
+.modal{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    -webkit-transition: visibility 200ms ease-in;
+    -o-transition: visibility 200ms ease-in;
+    transition: visibility 200ms ease-in;
+    z-index: 1000;
+}
+
+.modal--active {
+    visibility: visible;
+}
+
+.modal__overlay {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modal__container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 540rpx;
+    border-radius: 12rpx;
+    background-color: #FFF;
+    overflow: hidden;
+}
+
+.modal__content {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: center !important;
+    -ms-flex-align: center !important;
+    align-items: center !important;
+    font-size: medium;
+    letter-spacing: 5rpx;
+    padding: 32rpx 24rpx;
+    min-height: 180rpx;
+    max-height: 840rpx;
+    color: #333;
+    font-size: 28rpx;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    width: auto;
+}
+
+.modal__footer {
+    position: relative;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.modal__footer > button {
+    -webkit-flex: auto;
+    -ms-flex: auto;
+    flex: auto;
+    -webkit-box-flex: auto;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    -webkit-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+    margin-top: 0;
+    min-width: 160rpx;
+    height: 88rpx;
+    color: #333;
+    font-size: 28rpx;
+    line-height: 86rpx;
+    outline: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+}
