@@ -81,7 +81,15 @@ const FoodMenu: React.FC<FoodMenuProps> = ({ menuList, cartList, onChange }) => 
 
   const handleClick = (item: MenuItem) => {
     const temp = [...cartList];
-    temp.push(item);
+
+    const itemIdx = cartList.findIndex((cart) => cart.id === item.id)
+    if( itemIdx >= 0){
+      temp.splice(itemIdx, 1);
+    }else{
+      temp.push(item);
+    }
+
+    
     onChange(temp);
   }
 
@@ -90,8 +98,8 @@ const FoodMenu: React.FC<FoodMenuProps> = ({ menuList, cartList, onChange }) => 
       {menuList.map((item, idx) => {
 
         let icon = 'add-circle'
-        if(cartList.includes(item)){
-          icon = 'check'
+        if(cartList.findIndex((cart) => cart.id === item.id) >= 0){
+          icon = 'check';
         }
 
         return (
@@ -118,9 +126,15 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ list, onChange }) => {
     onChange(temp);
   }
 
+  const cleanSweep = () => {
+    const temp = [...list];
+    temp.splice(0, temp.length);
+    onChange(temp);
+  }
+
   return (
     <View className='box-1'>
-      <View className='shopping-cart-title'><AtIcon value='trash' size='16' /><View>清空</View></View>
+      <View className='shopping-cart-title'><AtIcon value='trash' size='16' /><View onClick={cleanSweep}>清空</View></View>
       <View className='shopping-cart-list'>
         {list.map((item, idx) => (
           <View key={idx} className='cart-box-content'>
@@ -148,7 +162,7 @@ const TabBar: React.FC<TabBarProps> = ({ menuList, cartList, onChange }) => {
       className='at-tabs-content'
       current={current}
       scroll
-      height='400px'
+      height='800px'
       tabDirection='vertical'
       tabList={tabs}
       onClick={(value) => { setCurrent(value) }}>
@@ -178,7 +192,7 @@ export default () => {
         <View className="cart-bar">
           <View className='l' onClick={() => { setcartOpen(cartOpen ? false : true) }}>
             <Image className='img-cart' src='https://s1.ax1x.com/2022/11/10/zpq07d.png' />
-            <View className="badge">7</View>
+            <View className="badge">{cartList.length}</View>
           </View>
           <AtButton className='cart-botton' type='primary'>选好了</AtButton>
         </View>
@@ -187,7 +201,7 @@ export default () => {
             { title: '点餐', image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png' },
             { title: '已点', image: 'https://img20.360buyimg.com/jdphoto/s72x72_jfs/t15151/308/1012305375/2300/536ee6ef/5a411466N040a074b.png' }
           ]}
-          onClick={(idx) => { return idx }}
+          onClick={(idx) => idx }
           current={0}
           fixed={true}
           className='bottom-menu'
