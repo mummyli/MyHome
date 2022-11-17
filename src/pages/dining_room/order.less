@@ -1,4 +1,4 @@
-.main-box{
+.main-box {
     max-height: 100%;
 }
 
@@ -53,7 +53,7 @@
     font-size: 30px;
     text-align: center;
     justify-content: center;
-    padding: 0 30rpx;
+    padding: 0 30px;
     line-height: 75px;
 }
 
@@ -63,9 +63,9 @@
     max-height: 100%;
 }
 
-.cart-items .at-float-layout__container{
-//    max-height: 65%;
-   border-radius: 30px;
+.cart-items .at-float-layout__container {
+    //    max-height: 65%;
+    border-radius: 30px;
 }
 
 
@@ -76,7 +76,7 @@
     padding-bottom: 300px;
 }
 
-.box-bottom{
+.box-bottom {
     position: fixed;
     width: 100%;
     min-height: 90px;
@@ -87,7 +87,7 @@
     bottom: 0px;
 }
 
-.bottom-menu{
+.bottom-menu {
     z-index: 1026;
     position: relative !important;
 }
@@ -108,7 +108,7 @@
 .badge {
     top: 0px !important;
     right: 0px !important;
-    position:absolute;
+    position: absolute;
     color: white;
     background-color: red;
     width: 36px;
@@ -124,18 +124,18 @@
     text-align: center;
 }
 
-.cart-box-content{
+.cart-box-content {
     height: 140px;
     border-bottom: 1px solid rgb(239, 239, 239);
 }
 
-.item-box-info{
+.item-box-info {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.shopping-cart-title{
+.shopping-cart-title {
     height: 40px;
     width: 100%;
     box-sizing: border-box;
@@ -145,20 +145,20 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content:flex-end;
+    justify-content: flex-end;
     font-size: 28px;
     letter-spacing: 4px;
     background-color: #fff;
 }
 
-.shopping-cart-list{
+.shopping-cart-list {
     padding-top: 40px;
     max-height: 70%;
     overflow: scroll;
 }
 
 
-.item-box{
+.item-box {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -166,17 +166,17 @@
     padding: 10px 50px;
 }
 
-.cart-img{
+.cart-img {
     height: 120px;
     width: 120px;
     padding-right: 30px;
 }
 
-.text-center{
+.text-center {
     text-align: center;
 }
 
-.at-modal__content{
+.at-modal__content {
     display: flex;
     flex-direction: row;
     align-items: center !important;
@@ -184,7 +184,7 @@
     letter-spacing: 5px;
 }
 
-.modal{
+.modal {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -217,8 +217,8 @@
     -webkit-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    width: 540rpx;
-    border-radius: 12rpx;
+    width: 540px;
+    border-radius: 12px;
     background-color: #FFF;
     overflow: hidden;
 }
@@ -233,13 +233,14 @@
     -webkit-align-items: center !important;
     -ms-flex-align: center !important;
     align-items: center !important;
+    justify-content: center;
     font-size: medium;
-    letter-spacing: 5rpx;
-    padding: 32rpx 24rpx;
-    min-height: 180rpx;
-    max-height: 840rpx;
+    letter-spacing: 5px;
+    padding: 32px 24px;
+    min-height: 180px;
+    max-height: 840px;
     color: #333;
-    font-size: 28rpx;
+    font-size: 32px;
     -webkit-box-sizing: content-box;
     box-sizing: content-box;
     width: auto;
@@ -252,7 +253,7 @@
     display: flex;
 }
 
-.modal__footer > button {
+.modal__footer>button {
     -webkit-flex: auto;
     -ms-flex: auto;
     flex: auto;
@@ -265,13 +266,67 @@
     -o-transition: background-color 0.3s;
     transition: background-color 0.3s;
     margin-top: 0;
-    min-width: 160rpx;
-    height: 88rpx;
+    min-width: 160px;
+    letter-spacing: 4px;
+    height: 88px;
     color: #333;
-    font-size: 28rpx;
-    line-height: 86rpx;
+    font-size: 30px;
+    line-height: 86px;
     outline: 0;
     border: 0;
     border-radius: 0;
     background-color: transparent;
+}
+
+.tab-nav-item {
+    border: 1px solid rgb(44, 41, 41);
+    height: 86px;
+}
+
+.menu-box {
+    max-height: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.scroll-out-box-nav{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    width: 30%;
+}
+
+.tab-nav{
+    padding-top: 15px;
+    overflow: scroll;
+    flex: 1;
+    overflow: hidden;
+    padding-bottom: 230px;
+}
+
+
+.scroll-out-box {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    width: 100%;
+    padding-left: 25px;
+}
+
+
+.menu-list {
+    padding-top: 15px;
+    overflow: scroll;
+    flex: 1;
+    overflow: hidden;
+    padding-bottom: 230px;
+}
+
+
+.menu-anc {
+    font-weight: bold;
+    color: rgb(58, 97, 180);
 }

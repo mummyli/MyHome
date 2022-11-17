@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { View, Image, Button } from '@tarojs/components'
-import { AtTabs, AtTabsPane, AtTabBar, AtIcon, AtButton, AtFloatLayout, AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
+import { View, Image, Button, ScrollView } from '@tarojs/components'
+import { AtTabs, AtTabsPane, AtTabBar, AtIcon, AtButton, AtFloatLayout, AtToast } from 'taro-ui'
 import './order.less'
 
 export interface MenuItem {
@@ -28,6 +28,7 @@ interface TabBarProps {
   cartList: MenuItem[];
   onChange: (list: MenuItem[]) => void;
 }
+
 
 const getSideBarList = () => {
   return [
@@ -178,27 +179,123 @@ const TabBar: React.FC<TabBarProps> = ({ menuList, cartList, onChange }) => {
 }
 
 
+const MyTabBar: React.FC<TabBarProps> = ({ menuList, cartList, onChange }) => {
+
+  const [currentAnc, setCurrentAnc] = useState<string>('a0');
+
+  const tabs = getSideBarList()
+
+  return (
+    <View className='menu-box'>
+      <View className='scroll-out-box-nav'>
+        <ScrollView className='tab-nav' scrollY scrollIntoView={currentAnc} enhanced={true} showScrollbar={false} onClick={(value) => {
+          setCurrentAnc(value.target.id); console.log(currentAnc);
+          console.log(currentAnc);
+        }}>
+          {tabs.map((item, idx) => (
+            <View className='tab-nav-item' id={item.id} key={idx}>{item.title}</View>
+          ))}
+        </ScrollView>
+      </View>
+      <View className='scroll-out-box'>
+        <ScrollView className='menu-list'
+          scrollY
+          enhanced={true}
+          showScrollbar={false}
+          scrollIntoView={currentAnc}
+        >
+          <View className='menu-anc' id='xc'>锚点1</View>
+          <View>菜品1</View>
+          <View>菜品2</View>
+          <View>菜品3</View>
+          <View>菜品4</View>
+          <View>菜品5</View>
+          <View>菜品6</View>
+          <View>菜品7</View>
+          <View className='menu-anc' id='dc'>锚点2</View>
+          <View>菜品8</View>
+          <View>菜品9</View>
+          <View>菜品10</View>
+          <View>菜品11</View>
+          <View>菜品12</View>
+          <View>菜品13</View>
+          <View>菜品14</View>
+          <View className='menu-anc' id='sc'>锚点3</View>
+          <View>菜品1</View>
+          <View>菜品2</View>
+          <View>菜品3</View>
+          <View>菜品4</View>
+          <View>菜品5</View>
+          <View>菜品6</View>
+          <View>菜品7</View>
+          <View className='menu-anc' id='jz'>锚点4</View>
+          <View>菜品1</View>
+          <View>菜品2</View>
+          <View>菜品3</View>
+          <View>菜品4</View>
+          <View>菜品5</View>
+          <View>菜品6</View>
+          <View>菜品7</View>
+          <View className='menu-anc' id='zl'>锚点5</View>
+          <View>菜品1</View>
+          <View>菜品2</View>
+          <View>菜品3</View>
+          <View>菜品4</View>
+          <View>菜品5</View>
+          <View>菜品6</View>
+          <View>菜品7</View>
+          <View className='menu-anc' id='yp'>锚点6</View>
+          <View>菜品1</View>
+          <View>菜品2</View>
+          <View>菜品3</View>
+          <View>菜品4</View>
+          <View>菜品5</View>
+          <View>菜品6</View>
+          <View>菜品7</View>
+        </ScrollView>
+      </View>
+    </View>
+  )
+}
+
+const postCartItems = (list: MenuItem[], onChange, setIsModalOpen, setIsToastOpen) => {
+  // post data
+
+  //clean data
+  const temp = [...list];
+  temp.splice(0, temp.length);
+  onChange(temp);
+
+  // close modal
+  setIsModalOpen(false);
+
+  // success information
+  setIsToastOpen(true);
+}
+
 export default () => {
 
   const [cartOpen, setcartOpen] = useState<boolean>(false)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isToastOpen, setIsToastOpen] = useState<boolean>(false)
   const [cartList, setCartList] = useState<MenuItem[]>(shopCartList())
   const [menuList, setMenuList] = useState<MenuItem[]>(getFoodMenu())
 
   return (
     <View className='main-box'>
-      <TabBar menuList={menuList} cartList={cartList} onChange={(value) => { setCartList(value); setcartOpen(false); }} />
+      <MyTabBar menuList={menuList} cartList={cartList} onChange={(value) => { setCartList(value); }} />
       <View className='box-bottom'>
         <View className="cart-bar">
           <View className='l' onClick={() => { setcartOpen(cartOpen ? false : true) }}>
             <Image className='img-cart' src='https://s1.ax1x.com/2022/11/10/zpq07d.png' />
             <View className="badge">{cartList.length}</View>
           </View>
-          <AtButton className='cart-botton' type='primary' >选好了</AtButton>
+          <AtButton className='cart-botton' type='primary' onClick={() => setIsModalOpen(true)}>选好了</AtButton>
         </View>
         <AtTabBar
           tabList={[
-            { title: '点餐', image: 'https://img12.360buyimg.com/jdphoto/s72x72_jfs/t6160/14/2008729947/2754/7d512a86/595c3aeeNa89ddf71.png' },
-            { title: '已点', image: 'https://img20.360buyimg.com/jdphoto/s72x72_jfs/t15151/308/1012305375/2300/536ee6ef/5a411466N040a074b.png' }
+            { title: '点餐', image: 'https://s1.ax1x.com/2022/11/17/zeLUAI.png' },
+            { title: '已点', image: 'https://s1.ax1x.com/2022/11/17/zeLTu4.png' }
           ]}
           onClick={(idx) => idx}
           current={0}
@@ -206,20 +303,22 @@ export default () => {
           className='bottom-menu'
         />
 
-        <View className='modal modal--active'>
-          <View className=' modal__overlay'> </View>
+        <AtToast isOpened={isToastOpen} text="提交成功，等着干饭吧~~~" icon="check" onClose={() => { setIsToastOpen(false) }}></AtToast>
+
+        <View className={isModalOpen ? 'modal modal--active' : 'modal'}>
+          <View className='modal__overlay'> </View>
           <View className='modal__container'>
             <View className='modal__content'>
-              自定义模态框
+              选好了吗？
             </View>
             <View className='modal__footer'>
-              <Button>取消</Button>
-              <Button>确认</Button>
+              <Button onClick={() => setIsModalOpen(false)}>取消</Button>
+              <Button onClick={() => postCartItems(cartList, setCartList, setIsModalOpen, setIsToastOpen)}>提交</Button>
             </View>
           </View>
         </View>
 
-        <AtFloatLayout isOpened={cartOpen} className='cart-items'>
+        <AtFloatLayout isOpened={cartOpen} className='cart-items' onClose={() => { setcartOpen(false) }}>
           <ShoppingCart list={cartList} onChange={(value) => { setCartList(value) }} />
         </AtFloatLayout >
       </View>
