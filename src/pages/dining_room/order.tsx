@@ -1,15 +1,24 @@
 import React, { useState } from 'react'
 import { View, Image, Button, ScrollView } from '@tarojs/components'
-import { AtTabs, AtTabsPane, AtTabBar, AtIcon, AtButton, AtFloatLayout, AtToast } from 'taro-ui'
+import { AtTabBar, AtIcon, AtButton, AtFloatLayout, AtToast } from 'taro-ui'
 import './order.less'
+import { createSelectorQuery } from '@tarojs/taro';
+
 
 export interface MenuItem {
   id: string;
   name: string;
   desc: string;
+  category: string;
   order_nums: number;
   pic_url: string;
   is_ordered: boolean;
+}
+
+export interface CategoryMenu {
+  category_id: string;
+  category_name: string;
+  menu_items: MenuItem[];
 }
 
 interface ShoppingCartProps {
@@ -24,7 +33,7 @@ interface FoodMenuProps {
 }
 
 interface TabBarProps {
-  menuList: MenuItem[];
+  menuList: CategoryMenu[];
   cartList: MenuItem[];
   onChange: (list: MenuItem[]) => void;
 }
@@ -32,36 +41,26 @@ interface TabBarProps {
 
 const getSideBarList = () => {
   return [
-    { title: '小炒', id: 'xc' },
-    { title: '炖菜', id: 'dc' },
-    { title: '烧菜', id: 'sc' },
-    { title: '煎炸', id: 'jz' },
-    { title: '蘸料', id: 'zl' },
-    { title: '饮品', id: 'yp' },
-    { title: '甜点', id: 'td' },
-    { title: '加菜', id: 'jc' }
+    { name: '小炒', id: 'xc' },
+    { name: '炖菜', id: 'dc' },
+    { name: '烧菜', id: 'sc' },
+    { name: '煎炸', id: 'jz' },
+    { name: '蘸料', id: 'zl' },
+    { name: '饮品', id: 'yp' },
+    { name: '甜点', id: 'td' },
+    { name: '加菜', id: 'jc' }
   ]
 }
 
+const getMenuList = () => {
+  const menu_list = '[{"category_id":"xc","category_name":"小炒","menu_items":[{"id":"qjrs","name":"青椒肉丝","desc":"desc desc","category":"xc","order_nums":"9","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"qcrm","name":"芹菜肉末","desc":"desc desc","category":"xc","order_nums":"20","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"xcr","name":"小炒肉","desc":"desc desc","category":"xc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smhg","name":"蒜苗回锅","desc":"desc desc","category":"xc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm2hg","name":"tehihsf","desc":"desc desc","category":"xc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smh3g","name":"ddffdfg","desc":"desc desc","category":"xc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm6hg","name":"sdfaf","desc":"desc desc","category":"xc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"}]},{"category_id":"dc","category_name":"炖菜","menu_items":[{"id":"qjrs","name":"青椒肉丝","desc":"desc desc","category":"dc","order_nums":"9","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"qcrm","name":"芹菜肉末","desc":"desc desc","category":"dc","order_nums":"20","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"xcr","name":"小炒肉","desc":"desc desc","category":"dc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smhg","name":"蒜苗回锅","desc":"desc desc","category":"dc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm2hg","name":"tehihsf","desc":"desc desc","category":"dc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smh3g","name":"ddffdfg","desc":"desc desc","category":"dc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm6hg","name":"sdfaf","desc":"desc desc","category":"dc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"}]},{"category_id":"sc","category_name":"烧菜","menu_items":[{"id":"qjrs","name":"青椒肉丝","desc":"desc desc","category":"sc","order_nums":"9","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"qcrm","name":"芹菜肉末","desc":"desc desc","category":"sc","order_nums":"20","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"xcr","name":"小炒肉","desc":"desc desc","category":"sc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smhg","name":"蒜苗回锅","desc":"desc desc","category":"sc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm2hg","name":"tehihsf","desc":"desc desc","category":"sc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smh3g","name":"ddffdfg","desc":"desc desc","category":"sc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm6hg","name":"sdfaf","desc":"desc desc","category":"sc","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"}]},{"category_id":"jz","category_name":"煎炸","menu_items":[{"id":"qjrs","name":"青椒肉丝","desc":"desc desc","category":"jz","order_nums":"9","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"qcrm","name":"芹菜肉末","desc":"desc desc","category":"jz","order_nums":"20","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"xcr","name":"小炒肉","desc":"desc desc","category":"jz","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smhg","name":"蒜苗回锅","desc":"desc desc","category":"jz","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm2hg","name":"tehihsf","desc":"desc desc","category":"jz","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smh3g","name":"ddffdfg","desc":"desc desc","category":"jz","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm6hg","name":"sdfaf","desc":"desc desc","category":"jz","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"}]},{"category_id":"zl","category_name":"蘸料","menu_items":[{"id":"qjrs","name":"青椒肉丝","desc":"desc desc","category":"zl","order_nums":"9","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"qcrm","name":"芹菜肉末","desc":"desc desc","category":"zl","order_nums":"20","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"xcr","name":"小炒肉","desc":"desc desc","category":"zl","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smhg","name":"蒜苗回锅","desc":"desc desc","category":"zl","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm2hg","name":"tehihsf","desc":"desc desc","category":"zl","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smh3g","name":"ddffdfg","desc":"desc desc","category":"zl","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm6hg","name":"sdfaf","desc":"desc desc","category":"zl","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"}]},{"category_id":"yp","category_name":"饮品","menu_items":[{"id":"qjrs","name":"青椒肉丝","desc":"desc desc","category":"yp","order_nums":"9","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"qcrm","name":"芹菜肉末","desc":"desc desc","category":"yp","order_nums":"20","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"xcr","name":"小炒肉","desc":"desc desc","category":"yp","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smhg","name":"蒜苗回锅","desc":"desc desc","category":"yp","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm2hg","name":"tehihsf","desc":"desc desc","category":"yp","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smh3g","name":"ddffdfg","desc":"desc desc","category":"yp","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm6hg","name":"sdfaf","desc":"desc desc","category":"yp","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"}]},{"category_id":"td","category_name":"甜点","menu_items":[{"id":"qjrs","name":"青椒肉丝","desc":"desc desc","category":"td","order_nums":"9","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"qcrm","name":"芹菜肉末","desc":"desc desc","category":"td","order_nums":"20","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"xcr","name":"小炒肉","desc":"desc desc","category":"td","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smhg","name":"蒜苗回锅","desc":"desc desc","category":"td","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm2hg","name":"tehihsf","desc":"desc desc","category":"td","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"smh3g","name":"ddffdfg","desc":"desc desc","category":"td","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"},{"id":"sm6hg","name":"sdfaf","desc":"desc desc","category":"td","order_nums":"11","pic_url":"https://s1.ax1x.com/2022/11/09/zSemy4.png","is_ordered":"false"}]}]'
 
-const getFoodMenu = () => {
-  const menue_list = '['
-    + '{ "id": "qjrs", "name": "青椒肉丝", "desc": "desc desc", "order_nums": "9", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
-    + '{ "id": "qcrm", "name": "芹菜肉末", "desc": "desc desc", "order_nums": "20", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
-    + '{ "id": "xcr", "name": "小炒肉", "desc": "desc desc", "order_nums": "11", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
-    + '{ "id": "tcpg", "name": "糖醋排骨", "desc": "desc desc", "order_nums": "9", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
-    + '{ "id": "tdb", "name": "土豆饼", "desc": "desc desc", "order_nums": "20", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
-    + '{ "id": "dcsdf", "name": "大葱烧豆腐", "desc": "desc desc", "order_nums": "11", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" },'
-    + '{ "id": "jyxbg", "name": "椒盐杏鲍菇", "desc": "desc desc", "order_nums": "11", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png", "is_ordered": "false" }'
-    + ' ]'
-
-  const result: MenuItem[] = JSON.parse(menue_list)
+  const result: CategoryMenu[] = JSON.parse(menu_list)
 
   return result
 }
 
 const shopCartList = () => {
-
   const cart_list = '['
     + '{ "id": "qjrs", "name": "青椒肉丝", "desc": "desc desc", "order_nums": "9", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png" },'
     + '{ "id": "qcrm", "name": "芹菜肉末", "desc": "desc desc", "order_nums": "20", "pic_url": "https://s1.ax1x.com/2022/11/09/zSemy4.png" },'
@@ -77,47 +76,6 @@ const shopCartList = () => {
   return result
 }
 
-
-const FoodMenu: React.FC<FoodMenuProps> = ({ menuList, cartList, onChange }) => {
-
-  const handleClick = (item: MenuItem) => {
-    const temp = [...cartList];
-
-    const itemIdx = cartList.findIndex((cart) => cart.id === item.id)
-    if (itemIdx >= 0) {
-      temp.splice(itemIdx, 1);
-    } else {
-      temp.push(item);
-    }
-
-    onChange(temp);
-  }
-
-  return (
-    <View className='content-box'>
-      {menuList.map((item, idx) => {
-
-        let icon = 'add-circle'
-        if (cartList.findIndex((cart) => cart.id === item.id) >= 0) {
-          icon = 'check';
-        }
-
-        return (
-          <View className='at-row item-detail' key={idx}>
-            <Image mode='scaleToFill' className='at-col at-col-4 at-col--auto item-img' src={item.pic_url} />
-            <View className='at-col out-box'>
-              <View className='item-title'>{item.name}</View>
-              <View className='item-desc'>{item.desc}</View>
-              <View className='at-row at-row__justify--between item-sales'>
-                <View>已点{item.order_nums}次</View>
-                <AtIcon value={icon} size='20' color='#F00' onClick={() => { handleClick(item); }}></AtIcon>
-              </View>
-            </View>
-          </View>)
-      })}
-    </View >
-  )
-}
 
 const ShoppingCart: React.FC<ShoppingCartProps> = ({ list, onChange }) => {
 
@@ -152,48 +110,45 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ list, onChange }) => {
     </View>)
 }
 
-const TabBar: React.FC<TabBarProps> = ({ menuList, cartList, onChange }) => {
-
-  const tabs = getSideBarList()
-
-  const [current, setCurrent] = useState<number>(0)
-
-  return (
-    <AtTabs
-      className='at-tabs-content'
-      current={current}
-      scroll
-      height='800px'
-      tabDirection='vertical'
-      tabList={tabs}
-      onClick={(value) => { setCurrent(value) }}>
-
-      {tabs.map((item, idx) => (
-        <AtTabsPane tabDirection='vertical' current={current} index={idx} key={item.id}>
-          <FoodMenu menuList={menuList} cartList={cartList} onChange={onChange} />
-        </AtTabsPane>
-      ))}
-
-    </AtTabs >
-  )
-}
-
 
 const MyTabBar: React.FC<TabBarProps> = ({ menuList, cartList, onChange }) => {
 
-  const [currentAnc, setCurrentAnc] = useState<string>('a0');
+  const [currentAnc, setCurrentAnc] = useState<string>(menuList[0].category_id);
 
   const tabs = getSideBarList()
 
+  const handleClick = (item: MenuItem) => {
+    const temp = [...cartList];
+
+    const itemIdx = cartList.findIndex((cart) => cart.id === item.id)
+    if (itemIdx >= 0) {
+      temp.splice(itemIdx, 1);
+    } else {
+      temp.push(item);
+    }
+
+    onChange(temp);
+  }
+  
+
+  const getCurrentAncId = (ancList) =>{
+
+    return ancList.reduce((p,v) => Math.abs(p.top) > Math.abs(v.top) ? v : p).id;
+
+  }
+  
   return (
     <View className='menu-box'>
       <View className='scroll-out-box-nav'>
-        <ScrollView className='tab-nav' scrollY scrollIntoView={currentAnc} enhanced={true} showScrollbar={false} onClick={(value) => {
-          setCurrentAnc(value.target.id); console.log(currentAnc);
-          console.log(currentAnc);
-        }}>
+        <ScrollView
+          className='tab-nav'
+          scrollY
+          scrollIntoView={currentAnc}
+          enhanced={true}
+          showScrollbar={false}
+          onClick={(value) => { setCurrentAnc(value.target.id); }}>
           {tabs.map((item, idx) => (
-            <View className='tab-nav-item' id={item.id} key={idx}>{item.title}</View>
+            <View className={currentAnc == item.id ? 'tab-nav-item tab-nav-item--active' : 'tab-nav-item'} id={item.id} key={idx}>{item.name}</View>
           ))}
         </ScrollView>
       </View>
@@ -203,65 +158,53 @@ const MyTabBar: React.FC<TabBarProps> = ({ menuList, cartList, onChange }) => {
           enhanced={true}
           showScrollbar={false}
           scrollIntoView={currentAnc}
+          onScroll={(e) => {
+            const other = createSelectorQuery().selectAll('.menu-anc');
+            other.boundingClientRect((ancValue) => {
+              setCurrentAnc(getCurrentAncId(ancValue, currentAnc));
+            }).exec();
+          }}
+
         >
-          <View className='menu-anc' id='xc'>锚点1</View>
-          <View>菜品1</View>
-          <View>菜品2</View>
-          <View>菜品3</View>
-          <View>菜品4</View>
-          <View>菜品5</View>
-          <View>菜品6</View>
-          <View>菜品7</View>
-          <View className='menu-anc' id='dc'>锚点2</View>
-          <View>菜品8</View>
-          <View>菜品9</View>
-          <View>菜品10</View>
-          <View>菜品11</View>
-          <View>菜品12</View>
-          <View>菜品13</View>
-          <View>菜品14</View>
-          <View className='menu-anc' id='sc'>锚点3</View>
-          <View>菜品1</View>
-          <View>菜品2</View>
-          <View>菜品3</View>
-          <View>菜品4</View>
-          <View>菜品5</View>
-          <View>菜品6</View>
-          <View>菜品7</View>
-          <View className='menu-anc' id='jz'>锚点4</View>
-          <View>菜品1</View>
-          <View>菜品2</View>
-          <View>菜品3</View>
-          <View>菜品4</View>
-          <View>菜品5</View>
-          <View>菜品6</View>
-          <View>菜品7</View>
-          <View className='menu-anc' id='zl'>锚点5</View>
-          <View>菜品1</View>
-          <View>菜品2</View>
-          <View>菜品3</View>
-          <View>菜品4</View>
-          <View>菜品5</View>
-          <View>菜品6</View>
-          <View>菜品7</View>
-          <View className='menu-anc' id='yp'>锚点6</View>
-          <View>菜品1</View>
-          <View>菜品2</View>
-          <View>菜品3</View>
-          <View>菜品4</View>
-          <View>菜品5</View>
-          <View>菜品6</View>
-          <View>菜品7</View>
+
+          {menuList.map((cItem, cIdx) => (
+            [
+              <View className='menu-anc' key={cIdx} id={cItem.category_id}>{cItem.category_name}</View>,
+
+              cItem.menu_items.map((mItem, mIdx) => {
+
+                let icon = 'add-circle'
+                if (cartList.findIndex((cart) => cart.id === mItem.id) >= 0) {
+                  icon = 'check';
+                }
+
+                return (<View className='at-row item-detail' key={mIdx}>
+                  <Image mode='scaleToFill' className='at-col at-col-4 at-col--auto item-img' src={mItem.pic_url} />
+                  <View className='at-col out-box'>
+                    <View className='item-title'>{mItem.name}</View>
+                    <View className='item-desc'>{mItem.desc}</View>
+                    <View className='at-row at-row__justify--between item-sales'>
+                      <View>已点{mItem.order_nums}次</View>
+                      <AtIcon value={icon} size='20' color='#F00' onClick={() => { handleClick(mItem); }}></AtIcon>
+                    </View>
+                  </View>
+                </View>)
+              })
+
+            ]
+          )
+          )}
         </ScrollView>
       </View>
     </View>
   )
 }
 
+
 const postCartItems = (list: MenuItem[], onChange, setIsModalOpen, setIsToastOpen) => {
   // post data
 
-  //clean data
+  // clean data
   const temp = [...list];
   temp.splice(0, temp.length);
   onChange(temp);
@@ -278,8 +221,8 @@ export default () => {
   const [cartOpen, setcartOpen] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false)
-  const [cartList, setCartList] = useState<MenuItem[]>(shopCartList())
-  const [menuList, setMenuList] = useState<MenuItem[]>(getFoodMenu())
+  const [cartList, setCartList] = useState<MenuItem[]>([])
+  const [menuList, setMenuList] = useState<CategoryMenu[]>(getMenuList())
 
   return (
     <View className='main-box'>

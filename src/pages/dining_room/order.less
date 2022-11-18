@@ -9,7 +9,7 @@
 
 .item-detail {
     padding-top: 15px;
-    padding-bottom: 15px;
+    padding-bottom: 50px;
 }
 
 .item-img {
@@ -278,10 +278,31 @@
     background-color: transparent;
 }
 
-.tab-nav-item {
-    border: 1px solid rgb(44, 41, 41);
-    height: 86px;
+.tab-nav{
+    overflow: scroll;
+    flex: 1;
+    overflow: hidden;
+    padding-bottom: 230px;
+    font-size: 30px;
+    letter-spacing: 4px;
+    text-align: center;
+    background-color: rgb(245, 245, 245);
 }
+
+
+.tab-nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+}
+
+.tab-nav .tab-nav-item--active {
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 32px;
+}
+
 
 .menu-box {
     max-height: 100%;
@@ -298,14 +319,6 @@
     width: 30%;
 }
 
-.tab-nav{
-    padding-top: 15px;
-    overflow: scroll;
-    flex: 1;
-    overflow: hidden;
-    padding-bottom: 230px;
-}
-
 
 .scroll-out-box {
     display: flex;
@@ -314,19 +327,21 @@
     overflow: hidden;
     width: 100%;
     padding-left: 25px;
+    padding-right: 25px;
 }
 
 
 .menu-list {
     padding-top: 15px;
+    padding-bottom: 230px;
     overflow: scroll;
     flex: 1;
     overflow: hidden;
-    padding-bottom: 230px;
 }
 
 
 .menu-anc {
     font-weight: bold;
     color: rgb(58, 97, 180);
+    letter-spacing: 5px;
 }
