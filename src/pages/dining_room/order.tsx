@@ -202,6 +202,7 @@ const MyTabBar: React.FC<TabBarProps> = ({ menuList, cartList, onChange }) => {
 
 
 const postCartItems = (list: MenuItem[], onChange, setIsModalOpen, setIsToastOpen) => {
+  
   // post data
 
   // clean data
@@ -246,7 +247,7 @@ export default () => {
           className='bottom-menu'
         />
 
-        <AtToast isOpened={isToastOpen} text="提交成功，等着干饭吧~~~" icon="check" onClose={() => { setIsToastOpen(false) }}></AtToast>
+        <AtToast isOpened={isToastOpen} text="黎先生已收到你的点单，等着干饭吧~~~" icon="check" onClose={() => { setIsToastOpen(false) }}></AtToast>
 
         <View className={isModalOpen ? 'modal modal--active' : 'modal'}>
           <View className='modal__overlay'> </View>

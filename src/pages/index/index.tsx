@@ -33,6 +33,10 @@ export default class Index extends Component<PropsWithChildren> {
             {
               image: 'https://s1.ax1x.com/2022/11/17/zeL3cD.png',
               value: '生活打卡'
+            },
+            {
+              image: 'https://s1.ax1x.com/2022/11/23/z8SDDH.png',
+              value: '小工具'
             }
           ]
         } />
