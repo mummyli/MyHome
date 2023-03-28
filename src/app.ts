@@ -18,6 +18,7 @@ class App extends Component<PropsWithChildren> {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         if (res.code) {
           console.log(res.code);
+          /*
           //发起网络请求
           Taro.request({
             url: that.globalData.path + '/miniLogin/login.ajax',
@@ -81,6 +82,7 @@ class App extends Component<PropsWithChildren> {
               }
             }
           })
+          */
         } else {
           console.log('登录失败！' + res.errMsg)
         }
@@ -98,6 +100,7 @@ class App extends Component<PropsWithChildren> {
         // session_key 已经失效，需要重新执行登录流程
         // 登录
         // this.gotologin();
+        console.log("session key 过期le1")
       }
     });
   }

@@ -54,7 +54,8 @@
     "@vant/weapp": "^1.10.6",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "taro-ui": "^3.1.0-beta.4"
+    "taro-ui": "^3.1.0-beta.4",
+    "weapp-cookie": "^1.4.8"
   },
   "devDependencies": {
     "@babel/core": "^7.8.0",
