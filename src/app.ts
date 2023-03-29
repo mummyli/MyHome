@@ -91,6 +91,7 @@ class App extends Component<PropsWithChildren> {
   }
   
   componentDidMount() {
+    /*
     Taro.checkSession({
       success: () => {
         console.log("session key 未过期")
@@ -103,6 +104,7 @@ class App extends Component<PropsWithChildren> {
         console.log("session key 过期le1")
       }
     });
+    */
   }
   
 

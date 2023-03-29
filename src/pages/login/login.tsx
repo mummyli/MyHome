@@ -3,6 +3,7 @@ import { Component } from 'react'
 import { View, Button, Image, Text } from '@tarojs/components'
 import './login.less'
 
+
 type User = {
   nickName: string;
   avatarUrl: string;
@@ -57,9 +58,6 @@ export default class Login extends Component<{}, State> {
         userInfo
       })
       // TODO: 发送用户信息到后端
-      console.log(userInfo)
-      console.log(res)
-      Taro.navigateTo({url: '/pages/index/index'})
     } catch (error) {
       console.error(error)
     }
@@ -68,7 +66,6 @@ export default class Login extends Component<{}, State> {
   async getUserInfo(): Promise<User> {
     try {
       const res = await Taro.getUserInfo()
-      // const res = await Taro.getUserProfile()
       if (res.errMsg === 'getUserInfo:ok') {
         return res.userInfo
       }
