@@ -1,6 +1,6 @@
 import Taro, { Config } from '@tarojs/taro'
-import { Component } from 'react'
-import { View, Button, Image, Text } from '@tarojs/components'
+import { Component, useState } from 'react'
+import { View, Button, Image, Text, Input } from '@tarojs/components'
 import './login.less'
 
 
@@ -14,6 +14,9 @@ type State = {
   userInfo: User | null;
 }
 
+// const [nickname, setNickName] = useState<string>('微信用户')
+// const [avatar, setAvatar] = useState<string>('None')
+
 export default class Login extends Component<{}, State> {
 
   config: Config = {
@@ -24,6 +27,8 @@ export default class Login extends Component<{}, State> {
     isAuthorized: false,
     userInfo: null,
   }
+  nickname: string
+  avatar: string
 
   async componentDidMount() {
     const isAuthorized = await this.checkAuthorized()
@@ -36,6 +41,7 @@ export default class Login extends Component<{}, State> {
     try {
       await Taro.getSetting()
       const res = await Taro.getUserInfo()
+      console.log(res.userInfo)
       if (res.errMsg === 'getUserInfo:ok') {
         this.setState({
           userInfo: res.userInfo
@@ -75,14 +81,27 @@ export default class Login extends Component<{}, State> {
     return { nickName: '', avatarUrl: '' }
   }
 
+
+
   render() {
     const { isAuthorized, userInfo } = this.state
+
     return (
       <View className='index'>
         {isAuthorized && userInfo ? (
           <View>
-            <Image className='avatar' src={userInfo.avatarUrl} />
-            <Text>{userInfo.nickName}</Text>
+            <Button open-type="chooseAvatar"
+                    onChooseAvatar={(e) => {
+                      this.avatar = e.detail.avatarUrl
+                    }}  // 在taro中使用的是onChooseAvatar
+                    className="info-content__btn">
+              <Image className="info-content__avatar" src={this.avatar}/> 
+            </Button>
+            <Input type="nickname" 
+	                 className="info-content__input"
+	                 placeholder="请输入昵称"
+	                 value={this.nickname}
+	                 onInput={(e) => this.nickname = e.detail.value}/>
           </View>
         ) : (
           <Button className='login-btn' onClick={this.handleLogin.bind(this)}>登录</Button>
