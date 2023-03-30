@@ -3,12 +3,8 @@ import { Component, useState } from 'react'
 import { View, Button, Image, Text, Input } from '@tarojs/components'
 import './login.less'
 
-type User = {
-  nickName: string;
-  avatarUrl: string;
-}
 
-const handleLogin = (setIsAuthorized) => {
+const handleLogin = (setIsAuthorized, setOpenid) => {
   try {
     Taro.login({
       success: res => {
@@ -25,8 +21,10 @@ const handleLogin = (setIsAuthorized) => {
               if (logininfo != null) {
                 if (logininfo.code == 200) {
                   if (logininfo.detail == "not register") {
+                    setOpenid(logininfo.openid)
                     setIsAuthorized(false)
                   } else {
+                    setOpenid(logininfo.openid)
                     Taro.setStorageSync('AUTH_TICKET', logininfo.AUTH_TICKET)
                     Taro.setStorageSync('nickname', logininfo.nickname)
                     Taro.navigateTo({ url: "/pages/index/index" })
@@ -55,7 +53,7 @@ export default () => {
   const [avatar, setAvatar] = useState<string>()
   const [nickName, setNickName] = useState<string>()
   const [isAuthorized, setIsAuthorized] = useState<boolean>()
-  const [userInfo, setUserInfo] = useState<User>()
+  const [openid, setOpenid] = useState<string>()
 
   return (
     <View className='index'>
@@ -71,9 +69,10 @@ export default () => {
             placeholder="请输入昵称"
             value={nickName}
             onInput={(e) => setNickName(e.detail.value)} />
+          <Button className='submit-btn' onClick={() => handleLogin(setIsAuthorized, setOpenid)}>注册</Button>
         </View>
       ) : (
-        <Button className='login-btn' onClick={() => handleLogin(setIsAuthorized)}>登录</Button>
+        <Button className='login-btn' onClick={() => handleLogin(setIsAuthorized, setOpenid)}>登录</Button>
       )}
     </View>
   )
