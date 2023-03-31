@@ -134,7 +134,7 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
           showScrollbar={false}
           onClick={(value) => { setCurrentAnc(value.target.id); }}>
           {tabs.map((item, idx) => (
-            <View className={currentAnc == item.classifi_id ? 'tab-nav-item tab-nav-item--active' : 'tab-nav-item'} id={item.classifi_id} key={idx}>{item.classifi_name}</View>
+            <View className={currentAnc == "anc_"+item.classifi_id ? 'tab-nav-item tab-nav-item--active' : 'tab-nav-item'} id={"anc_"+item.classifi_id} key={idx}>{item.classifi_name}</View>
           ))}
         </ScrollView>
       </View>
@@ -155,7 +155,7 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
 
           {dishesList.map((cItem, cIdx) => (
             [
-              <View className='menu-anc' key={cIdx} id={cItem.classifi_id}>{cItem.classifi_name}</View>,
+              <View className='menu-anc' key={cIdx} id={"anc_"+cItem.classifi_id}>{cItem.classifi_name}</View>,
 
               cItem.sub_dishes.map((mItem, mIdx) => {
 
