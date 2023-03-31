@@ -5,14 +5,21 @@ import './order.less'
 import { createSelectorQuery } from '@tarojs/taro';
 import http from '../../http'
 
+export interface OrderSummary{
+  dishes_id: string;
+  order_count: string;
+}
+
+
 export interface Dishes{
   dishes_id: string;
   dishes_name: string;
   dishes_pic_url: string;
   dishes_desc: string;
-  order_nums: number;
+  order_count: OrderSummary;
   is_ordered: boolean;
 }
+
 
 export interface MenuClassification{
   classifi_id: string;
@@ -170,7 +177,7 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
                     <View className='item-title'>{mItem.dishes_name}</View>
                     <View className='item-desc'>{mItem.dishes_desc}</View>
                     <View className='at-row at-row__justify--between item-sales'>
-                      <View>已点{mItem.order_nums}次</View>
+                      <View>已点{mItem.order_count.order_count}次</View>
                       <AtIcon value={icon} size='20' color='#F00' onClick={() => { handleClick(mItem); }}></AtIcon>
                     </View>
                   </View>
