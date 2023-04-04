@@ -117,6 +117,7 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
     if (itemIdx >= 0) {
       temp.splice(itemIdx, 1);
     } else {
+      // request server to add item
       temp.push(item);
     }
 
