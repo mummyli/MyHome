@@ -2,11 +2,12 @@ import Taro from '@tarojs/taro';
 
 const APIHOST = "http://127.0.0.1:8000/"
 
-/*
+
 // 网络请求拦截器
 const interceptor = function (chain) {
   const { requestParams } = chain;
   const token = Taro.getStorageSync('token'); // 拿到本地缓存中存的token
+
   requestParams.header = {
     ...requestParams.header,
     token, // 将token添加到头部
@@ -14,7 +15,7 @@ const interceptor = function (chain) {
 
   return chain.proceed(requestParams).then((res) => {
     if (res?.statusCode === 200) {
-      if (res.data.resultCode === '20401') {
+      if (res.data.resultCode === "20401") {
         Taro.removeStorageSync('token');
         Taro.showToast({
           title: '未登录',
@@ -22,14 +23,14 @@ const interceptor = function (chain) {
           duration: 2000,
           complete: () => {
             const { router } = Taro.getCurrentInstance();
-            if (router && router.path !== '/pages/login/index') {
+            if (router && router.path !== '/pages/login/login') {
               Taro.navigateTo({
-                url: '/pages/login/index',
+                url: '/pages/login/login',
               });
             }
           },
         });
-      } else if (res.data.resultCode !== '0000') {
+      } else if (res.data.resultCode !== "0000") {
         // 后端抛出来错误， 统一toast提示
         Taro.showToast({
           title: res.data.resultMessage,
@@ -38,7 +39,7 @@ const interceptor = function (chain) {
         throw new Error(res.data.resultMessage);
       } else {
         // 通信正常，拿到返回数据数据
-        return res.data;
+        return res;
       }
     } else {
       Taro.showToast({
@@ -50,12 +51,13 @@ const interceptor = function (chain) {
 };
 
 Taro.addInterceptor(interceptor);
-*/
+
 
 const request = async (method, url, params) => {
   // 由于post请求时习惯性query参数使用params，body参数使用data，而taro只有data参数，使用contentType作为区分，因此此处需要做一个判断
   let contentType = params?.data ? 'application/json' : 'application/x-www-form-urlencoded';
   if (params) contentType = params?.headers?.contentType || contentType;
+
   const option = {
     method,
     isShowLoading: false,
@@ -72,6 +74,7 @@ const request = async (method, url, params) => {
       throw new Error(e);
     },
   };
+
   return Taro.request(option);
 };
 

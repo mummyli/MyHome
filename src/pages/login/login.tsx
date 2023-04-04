@@ -4,38 +4,38 @@ import { useState } from 'react'
 import { View, Button, Image, Input } from '@tarojs/components'
 
 
-const handleLogin = (setIsAuthorized, setOpenid) => {
-  http.post("login", { data: { wechat_code: '' } }).then()
+const handleLogin = (setIsRegister, setOpenid) => {
 
   try {
     Taro.login({
       success: res => {
         // 发送 res.code 到后台换 查看是否已经注册
         if (res.code) {
-          console.log(res.code)
-          /* http.post("login/access-token", { data: { wechat_code: res.code } })
-            .then((res) => {
+          http.post("login/access-token", { data: { wechat_code: res.code } })
+            .then(res => {
+
               let logininfo = res.data.data
-
-              console.log(logininfo)
-
+              
               if (logininfo != null) {
-                if (logininfo.code == 200) {
-                  if (logininfo.message == "not register") {
-                    setOpenid(logininfo.openid)
-                    setIsAuthorized(false)
-                  } else {
-                    setOpenid(logininfo.openid)
-                    Taro.setStorageSync('AUTH_TICKET', logininfo.AUTH_TICKET)
-                    Taro.navigateTo({ url: "/pages/index/index" })
+                
+                if (res.data.resultCode === "403") {
+                  if (res.data.message === "not register") {
+                    setOpenid(logininfo.open_id)
+                    setIsRegister(false)
                   }
                 } else {
-                  console.log(logininfo)
+                  if (res.data.resultCode === "0000") {
+                    setOpenid(logininfo.open_id)
+                    Taro.setStorageSync('token', logininfo.access_token)
+                    Taro.navigateTo({ url: "/pages/index/index" })
+                  } else {
+                    console.log(logininfo)
+                  }
                 }
               } else {
-                console.log(res.data)
+                console.log(res)
               }
-            }) */
+            })
         } else {
           console.log('登录失败！' + res.errMsg)
         }
@@ -51,16 +51,17 @@ export default () => {
   const [avatar, setAvatar] = useState<string>()
   const [nickName, setNickName] = useState<string>()
   const [isAuthorized, setIsAuthorized] = useState<boolean>()
+  const [isRegister, setIsRegister] = useState<boolean>(true)
   const [openid, setOpenid] = useState<string>()
 
   return (
     <View className='index'>
-      {isAuthorized ? (
+      {!isRegister ? (
         <View>
           <Button open-type="chooseAvatar"
-            onChooseAvatar={(e) => setAvatar(e.detail.avatarUrl)} 
+            onChooseAvatar={(e) => setAvatar(e.detail.avatarUrl)}
             className="info-content__btn">
-            <Image src={avatar||''} className="avatar" />
+            <Image src={avatar || ''} className="avatar" />
           </Button>
           <Input type="nickname"
             className="info-content__input"
@@ -70,7 +71,7 @@ export default () => {
           <Button className='submit-btn' onClick={() => handleLogin(setIsAuthorized, setOpenid)}>注册</Button>
         </View>
       ) : (
-        <Button className='login-btn' onClick={() => handleLogin(setIsAuthorized, setOpenid)}>登录</Button>
+        <Button className='login-btn' onClick={() => handleLogin(setIsRegister, setOpenid)}>授权微信登录</Button>
       )}
     </View>
   )
