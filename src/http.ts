@@ -15,7 +15,9 @@ const interceptor = function (chain) {
 
   return chain.proceed(requestParams).then((res) => {
     if (res?.statusCode === 200) {
-      if (res.data.resultCode === "20401") {
+      if(res.data.resultCode === "40301"){
+        return res;
+      } else if (res.data.resultCode === "20401") {
         Taro.removeStorageSync('token');
         Taro.showToast({
           title: '未登录',

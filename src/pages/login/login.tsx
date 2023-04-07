@@ -15,10 +15,10 @@ const handleLogin = (setIsRegister, setOpenid) => {
             .then(res => {
 
               let logininfo = res.data.data
-              
+
               if (logininfo != null) {
-                
-                if (res.data.resultCode === "403") {
+
+                if (res.data.resultCode === "40301") {
                   if (res.data.message === "not register") {
                     setOpenid(logininfo.open_id)
                     setIsRegister(false)
@@ -46,11 +46,42 @@ const handleLogin = (setIsRegister, setOpenid) => {
   }
 }
 
+
+const handleRegister = (setIsRegister, setOpenid, openid, nickName, file) => {
+  console.log(openid)
+  console.log(nickName)
+  Taro.uploadFile({
+    url: "http://127.0.0.1:8000/login/register",
+    filePath: file,
+    name: 'file',
+    header: {
+      'content-type': 'multipart/form-data'
+    },
+    formData: {
+      'open_id' : openid,
+      'nick_name' : nickName
+    },
+    success: (res) => {
+      Taro.showToast({
+        icon: 'none',
+        title: '注册成功！\n 页面即将跳转！',
+      });
+
+      handleLogin(setIsRegister, setOpenid)
+    },
+    fail: (e) => {
+      Taro.showToast({
+        icon: 'none',
+        title: '头像上传失败，请重试',
+      })
+    },
+  })
+}
+
 export default () => {
 
   const [avatar, setAvatar] = useState<string>()
   const [nickName, setNickName] = useState<string>()
-  const [isAuthorized, setIsAuthorized] = useState<boolean>()
   const [isRegister, setIsRegister] = useState<boolean>(true)
   const [openid, setOpenid] = useState<string>()
 
@@ -67,8 +98,8 @@ export default () => {
             className="info-content__input"
             placeholder="请输入昵称"
             value={nickName}
-            onInput={(e) => setNickName(e.detail.value)} />
-          <Button className='submit-btn' onClick={() => handleLogin(setIsAuthorized, setOpenid)}>注册</Button>
+            onInput={(e) => console.log(e.detail.value)} />
+          <Button className='submit-btn' onClick={() => handleRegister(setIsRegister, setOpenid, openid, nickName, avatar)}>注册</Button>
         </View>
       ) : (
         <Button className='login-btn' onClick={() => handleLogin(setIsRegister, setOpenid)}>授权微信登录</Button>
