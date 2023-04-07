@@ -2,6 +2,7 @@ import Taro from '@tarojs/taro'
 import http from '../../http'
 import { useState } from 'react'
 import { View, Button, Image, Input } from '@tarojs/components'
+import './login.less'
 
 
 const handleLogin = (setIsRegister, setOpenid) => {
@@ -86,16 +87,16 @@ export default () => {
   const [openid, setOpenid] = useState<string>()
 
   return (
-    <View className='index'>
+    <View className='login-box'>
       {!isRegister ? (
-        <View>
+        <View className='register-box'>
           <Button open-type="chooseAvatar"
             onChooseAvatar={(e) => setAvatar(e.detail.avatarUrl)}
             className="info-content__btn">
             <Image src={avatar || ''} className="avatar" />
           </Button>
           <Input type="nickname"
-            className="info-content__input"
+            className="nickname-input"
             placeholder="请输入昵称"
             value={nickName}
             onInput={(e) => console.log(e.detail.value)} />
