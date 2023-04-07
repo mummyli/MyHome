@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import http from '../../http'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View, Button, Image, Input } from '@tarojs/components'
 import './login.less'
 
@@ -48,9 +48,24 @@ const handleLogin = (setIsRegister, setOpenid) => {
 }
 
 
-const handleRegister = (setIsRegister, setOpenid, openid, nickName, file) => {
-  console.log(openid)
-  console.log(nickName)
+const handleRegister = async (setIsRegister, setOpenid, openid, nickName, file) => {
+
+  if (nickName === undefined) {
+    const selectPromise = new Promise(reslove => {
+      Taro.createSelectorQuery()
+        .select(".nickname_input")
+        .fields({
+          properties: ["value"],
+        })
+        .exec((res) => {
+          reslove(res[0].value)
+        });
+    });
+
+    nickName = await selectPromise
+  }
+
+
   Taro.uploadFile({
     url: "http://127.0.0.1:8000/login/register",
     filePath: file,
@@ -59,16 +74,22 @@ const handleRegister = (setIsRegister, setOpenid, openid, nickName, file) => {
       'content-type': 'multipart/form-data'
     },
     formData: {
-      'open_id' : openid,
-      'nick_name' : nickName
+      'open_id': openid,
+      'nick_name': nickName
     },
     success: (res) => {
-      Taro.showToast({
-        icon: 'none',
-        title: '注册成功！\n 页面即将跳转！',
-      });
-
-      handleLogin(setIsRegister, setOpenid)
+      if (res.statusCode == 200) {
+        Taro.showToast({
+          icon: 'none',
+          title: '注册成功！\n 页面即将跳转！',
+        });
+        handleLogin(setIsRegister, setOpenid);
+      } else {
+        Taro.showToast({
+          icon: 'none',
+          title: '注册失败！',
+        })
+      }
     },
     fail: (e) => {
       Taro.showToast({
@@ -92,14 +113,14 @@ export default () => {
         <View className='register-box'>
           <Button open-type="chooseAvatar"
             onChooseAvatar={(e) => setAvatar(e.detail.avatarUrl)}
-            className="info-content__btn">
-            <Image src={avatar || ''} className="avatar" />
+            className="info-avatar__btn">
+            <Image src={avatar || 'https://i.328888.xyz/2023/04/07/irNDXy.jpeg'} className="avatar_img" />
           </Button>
           <Input type="nickname"
-            className="nickname-input"
+            className="nickname_input"
             placeholder="请输入昵称"
             value={nickName}
-            onInput={(e) => console.log(e.detail.value)} />
+            onInput={(e) => setNickName(e.detail.value)} />
           <Button className='submit-btn' onClick={() => handleRegister(setIsRegister, setOpenid, openid, nickName, avatar)}>注册</Button>
         </View>
       ) : (
