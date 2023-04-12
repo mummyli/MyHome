@@ -10,12 +10,12 @@ const interceptor = function (chain) {
 
   requestParams.header = {
     ...requestParams.header,
-    token, // 将token添加到头部
+    "Authorization": "bearer " + token, // 将token添加到头部
   };
 
   return chain.proceed(requestParams).then((res) => {
     if (res?.statusCode === 200) {
-      if(res.data.resultCode === "40301"){
+      if (res.data.resultCode === "40301") {
         return res;
       } else if (res.data.resultCode === "20401") {
         Taro.removeStorageSync('token');
@@ -35,12 +35,15 @@ const interceptor = function (chain) {
       } else if (res.data.resultCode !== "0000") {
         // 后端抛出来错误， 统一toast提示
         Taro.showToast({
-          title: res.data.resultMessage,
+          title: res.data.message,
           icon: 'none',
         });
-        throw new Error(res.data.resultMessage);
+        throw new Error(res.data.message);
       } else {
-        // 通信正常，拿到返回数据数据
+        const { router } = Taro.getCurrentInstance();
+        if (router && router.path !== '/pages/login/login') {
+          return res.data;
+        }
         return res;
       }
     } else {
