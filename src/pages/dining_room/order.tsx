@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { View, Image, Button, ScrollView } from '@tarojs/components'
 import { AtTabBar, AtIcon, AtButton, AtFloatLayout, AtToast } from 'taro-ui'
 import './order.less'
-import { createSelectorQuery } from '@tarojs/taro';
+import Taro, { createSelectorQuery } from '@tarojs/taro';
 import http from '../../http'
 
-export interface OrderSummary{
+export interface OrderSummary {
   dishes_id: string;
   order_count: string;
 }
 
 
-export interface Dishes{
+export interface Dishes {
   dishes_id: string;
   dishes_name: string;
   dishes_pic_url: string;
@@ -21,7 +21,7 @@ export interface Dishes{
 }
 
 
-export interface MenuClassification{
+export interface MenuClassification {
   classifi_id: string;
   classifi_name: string;
   classifi_desc: string;
@@ -45,9 +45,9 @@ interface TabBarProps {
 const getSideBarList = () => {
 
   const [classifiList, setClassifiList] = useState<MenuClassification[]>([]);
-  
+
   useEffect(() => {
-    http.get("classifications",{}).then((response) => {
+    http.get("classifications", {}).then((response) => {
       setClassifiList(response.data);
     });
   }, [])
@@ -60,7 +60,7 @@ const getDishesList = () => {
   const [classifiDishes, setClassifiDishes] = useState<MenuClassification[]>([]);
 
   useEffect(() => {
-    http.get("dishes",{data: {skip: 0, limit: 500}}).then((response) => {
+    http.get("dishes", { data: { skip: 0, limit: 500 } }).then((response) => {
       setClassifiDishes(response.data);
     });
   }, []);
@@ -123,14 +123,14 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
 
     onChange(temp);
   }
-  
 
-  const getCurrentAncId = (ancList) =>{
 
-    return ancList.reduce((p,v) => Math.abs(p.top) > Math.abs(v.top) ? v : p).id;
+  const getCurrentAncId = (ancList) => {
+
+    return ancList.reduce((p, v) => Math.abs(p.top) > Math.abs(v.top) ? v : p).id;
 
   }
-  
+
   return (
     <View className='menu-box'>
       <View className='scroll-out-box-nav'>
@@ -142,7 +142,7 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
           showScrollbar={false}
           onClick={(value) => { setCurrentAnc(value.target.id); }}>
           {tabs.map((item, idx) => (
-            <View className={currentAnc == "anc_"+item.classifi_id ? 'tab-nav-item tab-nav-item--active' : 'tab-nav-item'} id={"anc_"+item.classifi_id} key={idx}>{item.classifi_name}</View>
+            <View className={currentAnc == "anc_" + item.classifi_id ? 'tab-nav-item tab-nav-item--active' : 'tab-nav-item'} id={"anc_" + item.classifi_id} key={idx}>{item.classifi_name}</View>
           ))}
         </ScrollView>
       </View>
@@ -163,7 +163,7 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
 
           {dishesList.map((cItem, cIdx) => (
             [
-              <View className='menu-anc' key={cIdx} id={"anc_"+cItem.classifi_id}>{cItem.classifi_name}</View>,
+              <View className='menu-anc' key={cIdx} id={"anc_" + cItem.classifi_id}>{cItem.classifi_name}</View>,
 
               cItem.sub_dishes.map((mItem, mIdx) => {
 
@@ -196,8 +196,9 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
 
 
 const postCartItems = (list: Dishes[], onChange, setIsModalOpen, setIsToastOpen) => {
-  
+
   // post data
+  http.post("submit_orders", { data: { cart_id: null, dishes_ids: list } })
 
   // clean data
   const temp = [...list];
@@ -235,7 +236,7 @@ export default () => {
             { title: '点餐', image: 'https://s1.ax1x.com/2022/11/17/zeLUAI.png' },
             { title: '已点', image: 'https://s1.ax1x.com/2022/11/17/zeLTu4.png' }
           ]}
-          onClick={(idx) => idx}
+          onClick={(e) => { if (e === 0) { Taro.navigateTo({ url: "/pages/dining_room/order" }) } else { Taro.navigateTo({ url: "/pages/order_history/order_history" }) } }}
           current={0}
           fixed={true}
           className='bottom-menu'
