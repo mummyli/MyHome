@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro';
 
-const APIHOST = "http://127.0.0.1:8000/"
+const APIHOST = "https://home.l4j.cc/"
 
 
 // 网络请求拦截器

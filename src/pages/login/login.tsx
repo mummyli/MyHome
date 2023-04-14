@@ -67,7 +67,7 @@ const handleRegister = async (setIsRegister, setOpenid, openid, nickName, file) 
 
 
   Taro.uploadFile({
-    url: "http://127.0.0.1:8000/login/register",
+    url: "https://home.l4j.cc/login/register",
     filePath: file,
     name: 'file',
     header: {
