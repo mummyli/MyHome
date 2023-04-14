@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro';
 
-const APIHOST = "https://home.l4j.cc/"
-
+// const APIHOST = "https://home.l4j.cc/"
+const APIHOST = "https://test-43519-8-1317803760.sh.run.tcloudbase.com/"
 
 // 网络请求拦截器
 const interceptor = function (chain) {
@@ -62,7 +62,21 @@ const request = async (method, url, params) => {
   // 由于post请求时习惯性query参数使用params，body参数使用data，而taro只有data参数，使用contentType作为区分，因此此处需要做一个判断
   let contentType = params?.data ? 'application/json' : 'application/x-www-form-urlencoded';
   if (params) contentType = params?.headers?.contentType || contentType;
+  Taro.cloud.init({
+    env: 'prod-9g9vg2wg6b392b26'
+  })
 
+  const r = Taro.cloud.callContainer({
+    "path": url,
+    "header": {
+      "X-WX-SERVICE": "test",
+      'content-type': contentType,
+      "Authorization": "bearer " + Taro.getStorageSync('token'),
+    },
+    "method": method,
+    "data": params && (params?.data || params?.params)
+  })
+/* 
   const option = {
     method,
     isShowLoading: false,
@@ -78,9 +92,10 @@ const request = async (method, url, params) => {
     error(e) {
       throw new Error(e);
     },
-  };
+  }; */
+  const result = (await r);
 
-  return Taro.request(option);
+  return result.data;
 };
 
 export default {

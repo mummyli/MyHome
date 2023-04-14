@@ -14,18 +14,17 @@ const handleLogin = (setIsRegister, setOpenid) => {
         if (res.code) {
           http.post("login/access-token", { data: { wechat_code: res.code } })
             .then(res => {
-
-              let logininfo = res.data.data
+              let logininfo = res.data
 
               if (logininfo != null) {
 
-                if (res.data.resultCode === "40301") {
-                  if (res.data.message === "not register") {
+                if (res.resultCode === "40301") {
+                  if (res.message === "not register") {
                     setOpenid(logininfo.open_id)
                     setIsRegister(false)
                   }
                 } else {
-                  if (res.data.resultCode === "0000") {
+                  if (res.resultCode === "0000") {
                     setOpenid(logininfo.open_id)
                     Taro.setStorageSync('token', logininfo.access_token)
                     Taro.navigateTo({ url: "/pages/index/index" })
@@ -65,20 +64,29 @@ const handleRegister = async (setIsRegister, setOpenid, openid, nickName, file) 
     nickName = await selectPromise
   }
 
+  const updateFilePromise = new Promise(reslove => {
+    Taro.cloud.uploadFile({
+      cloudPath: openid + '.png',
+      filePath: file, // 文件路径
+      success: res => {
+        // get resource ID
+        reslove(res.fileID)
+      },
+      fail: err => {
+        Taro.showToast({
+          title: err.errMsg,
+          icon: 'none',
+        });
+      }
+    });
+  });
 
-  Taro.uploadFile({
-    url: "https://home.l4j.cc/login/register",
-    filePath: file,
-    name: 'file',
-    header: {
-      'content-type': 'multipart/form-data'
-    },
-    formData: {
-      'open_id': openid,
-      'nick_name': nickName
-    },
-    success: (res) => {
-      if (res.statusCode == 200) {
+  const fileId = await updateFilePromise
+
+  http.post("login/register",
+    { data: { file_id: fileId, open_id: openid, nick_name: nickName } })
+    .then((res) => {
+      if (res.resultCode == 200) {
         Taro.showToast({
           icon: 'none',
           title: '注册成功！\n 页面即将跳转！',
@@ -90,14 +98,7 @@ const handleRegister = async (setIsRegister, setOpenid, openid, nickName, file) 
           title: '注册失败！',
         })
       }
-    },
-    fail: (e) => {
-      Taro.showToast({
-        icon: 'none',
-        title: '头像上传失败，请重试',
-      })
-    },
-  })
+    })
 }
 
 export default () => {
