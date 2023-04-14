@@ -14,28 +14,28 @@ export default class Index extends Component<PropsWithChildren> {
         <AtGrid columnNum={2} onClick={this.handleNaviagate} data={
           [
             {
-              image: 'https://s1.ax1x.com/2022/11/17/zeLS7n.png',
+              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/lixianshengdesichu.png',
               url: '/pages/dining_room/order',
               value: '黎先生的私厨'
             },
             {
-              image: 'https://s1.ax1x.com/2022/11/17/zeLCt0.png',
+              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/jiatingjifen.png',
               value: '家庭积分'
             },
             {
-              image: 'https://s1.ax1x.com/2022/11/17/zeLKtx.png',
+              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/wuliaodejiqiren.png',
               value: '无聊的机器人'
             },
             {
-              image: 'https://s1.ax1x.com/2022/11/17/zeL11O.png',
+              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/daibanqingdan.png',
               value: '待办清单'
             },
             {
-              image: 'https://s1.ax1x.com/2022/11/17/zeL3cD.png',
+              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/shenghuodaka.png',
               value: '生活打卡'
             },
             {
-              image: 'https://s1.ax1x.com/2022/11/23/z8SDDH.png',
+              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/xiaogongju.png',
               value: '小工具'
             }
           ]
