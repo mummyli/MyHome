@@ -76,24 +76,44 @@ const request = async (method, url, params) => {
     "method": method,
     "data": params && (params?.data || params?.params)
   })
-/* 
-  const option = {
-    method,
-    isShowLoading: false,
-    url: APIHOST + url,
-    data: params && (params?.data || params?.params),
-    header: {
-      'content-type': contentType,
-    },
-    success(res) {
-      return res;
-      // 根据不同返回状态值3进行操作
-    },
-    error(e) {
-      throw new Error(e);
-    },
-  }; */
+  /* 
+    const option = {
+      method,
+      isShowLoading: false,
+      url: APIHOST + url,
+      data: params && (params?.data || params?.params),
+      header: {
+        'content-type': contentType,
+      },
+      success(res) {
+        return res;
+        // 根据不同返回状态值3进行操作
+      },
+      error(e) {
+        throw new Error(e);
+      },
+    }; */
   const result = (await r);
+
+  if (result?.statusCode === 403 && result?.data?.detail === "Could not validate credentials") {
+    Taro.removeStorageSync('token');
+    Taro.showToast({
+      title: '未登录',
+      icon: 'none',
+      duration: 2000,
+      complete: () => {
+
+        setTimeout(function () {
+          const { router } = Taro.getCurrentInstance();
+          if (router && router.path !== '/pages/login/login') {
+            Taro.navigateTo({
+              url: '/pages/login/login',
+            });
+          }
+        }, 2000)
+      },
+    });
+  }
 
   return result.data;
 };

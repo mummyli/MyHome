@@ -1,7 +1,7 @@
 export default defineAppConfig({
   pages: [
-    'pages/login/login',
     'pages/index/index',
+    'pages/login/login',
     'pages/dining_room/order',
     'pages/order_history/order_history',
   ],

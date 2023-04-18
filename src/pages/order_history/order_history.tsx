@@ -12,7 +12,7 @@ export interface Dishes {
 }
 
 interface ShowDetailsProps {
-    list: Dishes[];
+    history: OrderHistory;
     onChange: (flag: boolean) => void;
 }
 
@@ -27,7 +27,7 @@ export interface OrderHistory {
 
 interface OrderHistoryProps {
     list: OrderHistory[];
-    onChange: (list: Dishes[]) => void;
+    onChange: (history: OrderHistory) => void;
     onChangeBool: (flag: boolean) => void;
 }
 
@@ -44,12 +44,16 @@ const getHistoryOrdersByUserid = () => {
 }
 
 
-const ShowDetails: React.FC<ShowDetailsProps> = ({ list, onChange }) => {
+const ShowDetails: React.FC<ShowDetailsProps> = ({ history, onChange }) => {
+    console.log(history)
     return (
         <View className='box-1'>
-            <View className='shopping-cart-title'><AtIcon onClick={() => {onChange(false);}} value='close' size='16' /></View>
+            <View className='shopping-cart-title'>
+                <Text className='detail-time'>提交时间：{history?.submit_time.replace("T", " ")}</Text>
+                <AtIcon onClick={() => {onChange(false);}} value='close' size='16' />
+            </View>
             <View className='shopping-cart-list'>
-                {list.map((item, idx) => (
+                {history?.order_details.map((item, idx) => (
                     <View key={idx} className='cart-box-content'>
                         <View className='item-box'>
                             <View className='item-box-info'>
@@ -73,7 +77,7 @@ const HistoryOrdersList: React.FC<OrderHistoryProps> = ({ list, onChange, onChan
             {
                 list.map((item, idx) => (
                     <View className="item_container" key={idx} onClick={() => {
-                        onChange(item.order_details);
+                        onChange(item);
                         onChangeBool(true);
                     }}>
                         <View className="item_header">
@@ -97,16 +101,16 @@ const HistoryOrdersList: React.FC<OrderHistoryProps> = ({ list, onChange, onChan
 export default () => {
     const [historyOrders, setHistoryOrders] = useState<OrderHistory[]>([])
     const [isShowDetails, setIsShowDetails] = useState<boolean>(false)
-    const [detailList, setDetailList] = useState<Dishes[]>([])
+    const [details, setDetails] = useState<OrderHistory>()
 
 
     return (
         <View className='main-box'>
             <HistoryOrdersList list={historyOrders}
-                onChange={(value) => { setDetailList(value); }}
+                onChange={(value) => { setDetails(value); }}
                 onChangeBool={(value) => { setIsShowDetails(value); }} />
             <AtFloatLayout isOpened={isShowDetails} className='cart-items' onClose={() => { setIsShowDetails(false) }}>
-                <ShowDetails list={detailList} onChange={(value) => { setIsShowDetails(value); }} />
+                <ShowDetails history={details as OrderHistory} onChange={(value) => { setIsShowDetails(value); }} />
             </AtFloatLayout >
         </View>
     )

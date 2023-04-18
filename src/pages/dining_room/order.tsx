@@ -87,7 +87,7 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ list, onChange }) => {
     <View className='box-1'>
       <View className='shopping-cart-title'><AtIcon value='trash' size='16' /><View onClick={cleanSweep}>清空</View></View>
       <View className='shopping-cart-list'>
-        {list.map((item, idx) => (
+        {list?.map((item, idx) => (
           <View key={idx} className='cart-box-content'>
             <View className='item-box'>
               <View className='item-box-info'>
@@ -141,7 +141,7 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
           enhanced={true}
           showScrollbar={false}
           onClick={(value) => { setCurrentAnc(value.target.id); }}>
-          {tabs.map((item, idx) => (
+          {tabs?.map((item, idx) => (
             <View className={currentAnc == "anc_" + item.classifi_id ? 'tab-nav-item tab-nav-item--active' : 'tab-nav-item'} id={"anc_" + item.classifi_id} key={idx}>{item.classifi_name}</View>
           ))}
         </ScrollView>
@@ -161,7 +161,7 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
 
         >
 
-          {dishesList.map((cItem, cIdx) => (
+          {dishesList?.map((cItem, cIdx) => (
             [
               <View className='menu-anc' key={cIdx} id={"anc_" + cItem.classifi_id}>{cItem.classifi_name}</View>,
 
@@ -172,12 +172,12 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
                   icon = 'check';
                 }
 
-                return (<View className='at-row item-detail' key={mIdx}>
-                  <Image mode='scaleToFill' className='at-col at-col-4 at-col--auto item-img' src={mItem.dishes_pic_url} />
-                  <View className='at-col out-box'>
+                return (<View className='item-detail' key={mIdx}>
+                  <View className='img-box'><Image mode='scaleToFill' className='item-img' src={mItem.dishes_pic_url} /></View>
+                  <View className='out-box'>
                     <View className='item-title'>{mItem.dishes_name}</View>
                     <View className='item-desc'>{mItem.dishes_desc}</View>
-                    <View className='at-row at-row__justify--between item-sales'>
+                    <View className='item-sales'>
                       <View>已点{mItem.order_count.order_count}次</View>
                       <AtIcon value={icon} size='20' color='#F00' onClick={() => { handleClick(mItem); }}></AtIcon>
                     </View>

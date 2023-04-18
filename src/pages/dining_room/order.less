@@ -10,11 +10,19 @@
 .item-detail {
     padding-top: 15px;
     padding-bottom: 50px;
+    display: flex;
+    flex-direction: row;
 }
 
+.img-box{
+    height: 200px;
+    width: 200px;
+}
 .item-img {
     width: 200px;
     height: 200px;
+    padding: auto;
+    object-fit: cover;
 }
 
 .item-title {
@@ -28,6 +36,10 @@
 
 .item-sales {
     font-size: 28px;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 
@@ -37,6 +49,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: flex-start;
+    width: 100%;
 }
 
 .img-cart {

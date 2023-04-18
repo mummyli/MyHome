@@ -125,7 +125,10 @@ export default () => {
           <Button className='submit-btn' onClick={() => handleRegister(setIsRegister, setOpenid, openid, nickName, avatar)}>注册</Button>
         </View>
       ) : (
-        <Button className='login-btn' onClick={() => handleLogin(setIsRegister, setOpenid)}>授权微信登录</Button>
+        <View className='login-inner'>
+          <Image className="login-pic" src="cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/lishome.png" />
+          <Button className='login-btn' onClick={() => handleLogin(setIsRegister, setOpenid)}>授权微信登录</Button>
+        </View>
       )}
     </View>
   )
