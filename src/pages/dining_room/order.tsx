@@ -75,12 +75,14 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ list, onChange }) => {
     const temp = [...list];
     temp.splice(idx, 1);
     onChange(temp);
+    Taro.setStorageSync("myCart", temp);
   }
 
   const cleanSweep = () => {
     const temp = [...list];
     temp.splice(0, temp.length);
     onChange(temp);
+    Taro.removeStorageSync("myCart");
   }
 
   return (
@@ -122,6 +124,7 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
     }
 
     onChange(temp);
+    Taro.setStorageSync("myCart", temp);
   }
 
 
@@ -204,6 +207,7 @@ const postCartItems = (list: Dishes[], onChange, setIsModalOpen, setIsToastOpen)
   const temp = [...list];
   temp.splice(0, temp.length);
   onChange(temp);
+  Taro.removeStorageSync("myCart");
 
   // close modal
   setIsModalOpen(false);
@@ -214,10 +218,12 @@ const postCartItems = (list: Dishes[], onChange, setIsModalOpen, setIsToastOpen)
 
 export default () => {
 
+  console.log("myCart: " + Taro.getStorageSync("myCart"))
+  
   const [cartOpen, setcartOpen] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false)
-  const [cartList, setCartList] = useState<Dishes[]>([])
+  const [cartList, setCartList] = useState<Dishes[]>(Taro.getStorageSync("myCart")===""?[]:Taro.getStorageSync("myCart"))
   const [dishesList, setDishesList] = useState<MenuClassification[]>([])
 
   return (

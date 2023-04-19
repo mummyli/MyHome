@@ -50,7 +50,6 @@ export default () => {
       })
   ))
 
-  console.log(grid_data)
   return (
     <View className='index'>
       <AtGrid columnNum={2} onClick={(item) => { Taro.navigateTo({ url: item.url }) }} data={
