@@ -1,46 +1,61 @@
-import { Component, PropsWithChildren } from 'react'
+import { Component, PropsWithChildren, useState, useEffect } from 'react'
 import { View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import './index.less'
 import { AtGrid } from "taro-ui"
+import http from '../../http'
 
-export default class Index extends Component<PropsWithChildren> {
+export interface MenuItem {
+  menu_id: number;
+  menu_icon: string;
+  menu_name: string;
+  menu_order: number;
+  app_url: string;
+}
 
-  handleNaviagate = (item) => { Taro.navigateTo({ url: item.url }) };
 
-  render() {
-    return (
-      <View className='index'>
-        <AtGrid columnNum={2} onClick={this.handleNaviagate} data={
-          [
-            {
-              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/lixianshengdesichu.png',
-              url: '/pages/dining_room/order',
-              value: '黎先生的私厨'
-            },
-            {
-              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/jiatingjifen.png',
-              value: '家庭积分'
-            },
-            {
-              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/wuliaodejiqiren.png',
-              value: '无聊的机器人'
-            },
-            {
-              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/daibanqingdan.png',
-              value: '待办清单'
-            },
-            {
-              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/shenghuodaka.png',
-              value: '生活打卡'
-            },
-            {
-              image: 'cloud://prod-9g9vg2wg6b392b26.7072-prod-9g9vg2wg6b392b26-1317803760/xiaogongju.png',
-              value: '小工具'
-            }
-          ]
-        } />
-      </View>
-    )
-  }
+export interface UserMenus {
+  menu_id: number;
+  user_id: string;
+  grant_id: string;
+  menus: MenuItem;
+}
+
+export interface GridData {
+  image: string;
+  url: string;
+  value: string;
+}
+
+
+export default () => {
+  const [userMenus, setUserMenus] = useState<UserMenus[]>([]);
+
+  useEffect(() => {
+    http.get("/user/user_menus", {}).then((response) => {
+      setUserMenus(response.data);
+    });
+  }, [])
+
+  const grid_data = [{}]
+
+  grid_data.pop()
+
+  userMenus?.map((item, _) => (
+    grid_data.push(
+      {
+        image: item.menus.menu_icon,
+        url: item.menus.app_url,
+        value: item.menus.menu_name
+      })
+  ))
+
+  console.log(grid_data)
+  return (
+    <View className='index'>
+      <AtGrid columnNum={2} onClick={(item) => { Taro.navigateTo({ url: item.url }) }} data={
+        grid_data
+      } />
+    </View>
+  )
 }
