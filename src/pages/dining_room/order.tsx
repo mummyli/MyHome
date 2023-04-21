@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, Image, Button, ScrollView } from '@tarojs/components'
-import { AtTabBar, AtIcon, AtButton, AtFloatLayout, AtToast } from 'taro-ui'
+import { AtTabBar, AtIcon, AtButton, AtFloatLayout, AtToast, AtSearchBar } from 'taro-ui'
 import './order.less'
 import Taro, { createSelectorQuery } from '@tarojs/taro';
 import http from '../../http'
@@ -40,6 +40,14 @@ interface TabBarProps {
   cartList: Dishes[];
   onChange: (list: Dishes[]) => void;
 }
+
+
+interface SearchProps {
+  dishesList: MenuClassification[];
+  cartList: Dishes[];
+  onChange: (list: Dishes[]) => void;
+}
+
 
 
 const getSideBarList = () => {
@@ -197,6 +205,26 @@ const MyTabBar: React.FC<TabBarProps> = ({ dishesList, cartList, onChange }) => 
   )
 }
 
+const SearchBox: React.FC<SearchProps> = ({ dishesList, cartList, onChange }) => {
+
+  const [searchValue, setSearchValue] = useState<string>("")
+
+  const onActionClick () {
+    console.log('开始搜索')
+  }
+
+
+  return (
+    <View className="search-main">
+      <AtSearchBar
+        actionName='搜一下'
+        value={searchValue}
+        onChange={(value) => { setSearchValue(value) }}
+        onActionClick={() => { onActionClick() }}
+      />
+    </View>
+  )
+}
 
 const postCartItems = (list: Dishes[], onChange, setIsModalOpen, setIsToastOpen) => {
 
@@ -219,11 +247,11 @@ const postCartItems = (list: Dishes[], onChange, setIsModalOpen, setIsToastOpen)
 export default () => {
 
   console.log("myCart: " + Taro.getStorageSync("myCart"))
-  
+
   const [cartOpen, setcartOpen] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false)
-  const [cartList, setCartList] = useState<Dishes[]>(Taro.getStorageSync("myCart")===""?[]:Taro.getStorageSync("myCart"))
+  const [cartList, setCartList] = useState<Dishes[]>(Taro.getStorageSync("myCart") === "" ? [] : Taro.getStorageSync("myCart"))
   const [dishesList, setDishesList] = useState<MenuClassification[]>([])
 
   return (
@@ -266,6 +294,10 @@ export default () => {
         <AtFloatLayout isOpened={cartOpen} className='cart-items' onClose={() => { setcartOpen(false) }}>
           <ShoppingCart list={cartList} onChange={(value) => { setCartList(value) }} />
         </AtFloatLayout >
+
+        <AtFloatLayout isOpened={false} className="search-box" onClose={() => { }}>
+          <SearchProps />
+        </AtFloatLayout>
       </View>
     </View>
   )
